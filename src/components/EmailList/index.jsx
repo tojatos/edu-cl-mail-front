@@ -1,9 +1,12 @@
 import React from 'react';
 import EmailListItem from '../EmailListItem';
 
-function EmailList({mails}) {
+function EmailList({mails, onClick}) {
     const mail_list = mails.map(mail =>
-    <EmailListItem {...mail} />)
+    <EmailListItem
+    key={mail.id}
+    {...mail}
+    onClick={() => onClick(mail.id)} />)
     return <table>
             <thead>
                 <tr>
