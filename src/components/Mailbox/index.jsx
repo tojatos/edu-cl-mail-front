@@ -6,9 +6,11 @@ import NoneSelected from '../NoneSelected';
 
 function Mailbox({mails}) {
     const [selectedMailId, setSelectedMailId] = useState(undefined);
+    const [searchText, setSearchText] = useState("");
     const [selectedSenderOptions, setSelectedSenderOptions] = useState(undefined);
+
     const onEmailListItemClick = clickedId => setSelectedMailId(selectedMailId === clickedId ? undefined : clickedId)
-    console.log(selectedSenderOptions);
+    const onSearchChange = event => setSearchText(event.target.value.toLowerCase());
 
     const senderOptions = mails
       .map(mail => mail.sender)
@@ -23,6 +25,10 @@ function Mailbox({mails}) {
       mails = mails.filter(m => selectedSenderOptions.includes(m.sender));
     }
 
+    if(searchText.length > 0) {
+      mails = mails.filter(m => m.title.toLowerCase().includes(searchText) || m.message.toLowerCase().includes(searchText))
+    }
+
   return (
     <div>
       <Select
@@ -31,6 +37,7 @@ function Mailbox({mails}) {
         options={senderOptions}
         isMulti
       />
+      <input type="text" placeholder="Szukaj w treści" onChange={onSearchChange} size="1" />
       <EmailList mails={mails} onClick={onEmailListItemClick} />
       <div>
         {selectedMail}
