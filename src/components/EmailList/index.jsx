@@ -10,7 +10,7 @@ function EmailList({mails, onClick}) {
     return <table>
             <thead>
                 <tr>
-                    <th>Temat</th>
+                    <th>Nadawca</th>
                     <th>Tytuł</th>
                     <th>Priorytet</th>
                     <th>Data</th>

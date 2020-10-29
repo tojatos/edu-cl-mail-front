@@ -1,21 +1,20 @@
 import React from 'react';
 
 function Email({title, sender, date, message}) {
+    console.log(message);
     return (
         <div className="email">
             <dl>
-                <dt>Sender</dt>
+                <dt>Nadawca</dt>
                 <dd>{sender}</dd>
 
-                <dt>Date</dt>
+                <dt>Data</dt>
                 <dd>{date}</dd>
 
-                <dt>Title</dt>
+                <dt>Tytuł</dt>
                 <dd>{title}</dd>
             </dl>
-            <div className="body">
-                {message}
-            </div>
+            <div className="body" dangerouslySetInnerHTML={{__html: message.replace(/(?:\r\n|\r|\n)/g, '<br>')}}></div>
         </div>
     );
 }
