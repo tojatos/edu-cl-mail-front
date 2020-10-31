@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import GetMailsForm from '../GetMailsForm';
 import Mailbox from '../Mailbox';
 import axios from 'axios';
+import Footer from '../Footer';
 
 function App() {
     const [mails, setMails] = useState([]);
@@ -16,6 +17,7 @@ function App() {
             <GetMailsForm setMails={setMails}/>
             <button onClick={setDummyData}>Pobierz dummy</button>
             {mails.length !== 0 ? <Mailbox mails={mails}/> : null}
+            <Footer/>
         </div>
     );
 }
