@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 
-function GetMailsForm({setMails}) {
+function GetMailsForm({setMails, setIsLoading}) {
     const [amount, setAmount] = useState(30);
     const [shouldDownloadAll, setShouldDownloadAll] = useState(false);
     const { register, handleSubmit, errors } = useForm();
     const onSubmit = async ({login, password}) => {
+        setIsLoading(true);
         const url = shouldDownloadAll ? 'https://krzysztofruczkowski.pl:2020/api/get_mails' : `https://krzysztofruczkowski.pl:2020/api/get_mails/${amount}`;
         try {
             const result = await axios.post(url, {username: login, password: password});
@@ -19,6 +20,8 @@ function GetMailsForm({setMails}) {
             }
         } catch (error) {
             console.error(error);
+        } finally {
+            setIsLoading(false);
         }
     }
 
