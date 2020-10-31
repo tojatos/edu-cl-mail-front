@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
+import './index.sass';
 
 function GetMailsForm({setMails, setIsLoading}) {
     const [amount, setAmount] = useState(30);
@@ -27,33 +28,44 @@ function GetMailsForm({setMails, setIsLoading}) {
 
     const downloadAmount = () => {
         setShouldDownloadAll(false);
-        handleSubmit();
     };
 
     const downloadAll = () => {
         setShouldDownloadAll(true);
-        handleSubmit();
     };
 
+    const setDummyData = async () => {
+        setIsLoading(true);
+        const result = await axios.get('dummy_data.json');
+        setMails(result.data);
+        setIsLoading(false);
+    }
+
     return (
-        <form className="get-mails-form" onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group">
-                <label htmlFor="login">Login</label>
-                <input name="login" ref={register({ required: true })} />
-            </div>
-            <div className="form-group">
-                <label htmlFor="password">Hasło</label>
-                <input name="password" type="password" ref={register({ required: true })} />
-            </div>
-            <div className="form-group">
-                <label htmlFor="amount">Ilość maili (opcjonalnie)</label>
-                <input name="amount" type="number" value={amount} onChange={e => setAmount(Math.max(e.target.value, 0))}/>
-            </div>
-            {errors.login && <span>Login wymagany</span>}
-            {errors.password && <span>Hasło wymagane</span>}
-            <button onClick={downloadAmount}>Pobierz maili: {amount}</button>
-            <button onClick={downloadAll}>Pobierz wszystkie maile</button>
-        </form>
+        <div className="get-mails-container">
+            <form className="get-mails-form" onSubmit={handleSubmit(onSubmit)}>
+                <div className="form-group">
+                    <label htmlFor="login">Login</label>
+                    <input name="login" ref={register({ required: true })} />
+                </div>
+                {errors.login && <span className="error">Login wymagany</span>}
+                <div className="form-group">
+                    <label htmlFor="password">Hasło</label>
+                    <input name="password" type="password" ref={register({ required: true })} />
+                </div>
+                {errors.password && <span className="error">Hasło wymagane</span>}
+                    <div className="form-group">
+                        <label htmlFor="amount">Ilość maili</label>
+                        <div className="input-button-group">
+                            <input size="1" name="amount" type="number" value={amount} onChange={e => setAmount(Math.max(e.target.value, 0))}/>
+                            <button onClick={downloadAmount}>Pobierz maili: {amount}</button>
+                        </div>
+                    </div>
+                <button onClick={downloadAll}>Pobierz wszystkie maile</button>
+            </form>
+            <div className="small-or">lub</div>
+            <button type="button" onClick={setDummyData}>Pobierz testowe maile</button>
+        </div>
     );
 }
 
