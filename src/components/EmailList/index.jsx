@@ -1,25 +1,25 @@
 import React from 'react';
 import EmailListItem from '../EmailListItem';
+import './index.sass';
 
-function EmailList({mails, onClick}) {
+function EmailList({ mails, onClick }) {
     const mail_list = mails.map(mail =>
-    <EmailListItem
-    key={mail.id}
-    {...mail}
-    onClick={() => onClick(mail.id)} />)
-    return <table>
-            <thead>
-                <tr>
-                    <th>Nadawca</th>
-                    <th>Tytuł</th>
-                    <th>Priorytet</th>
-                    <th>Data</th>
-                </tr>
-            </thead>
-            <tbody>
+        <EmailListItem
+            key={mail.id}
+            {...mail}
+            onClick={() => onClick(mail.id)} />)
+    return (
+        <div className="email-list">
+            <header>
+                <div>Temat</div>
+                <div>Nadawca</div>
+                <div>Data</div>
+                <div>Priorytet</div>
+            </header>
+            <div className="body">
                 {mail_list}
-            </tbody>
-        </table>;
+            </div>
+        </div>
+    );
 }
-
 export default EmailList;

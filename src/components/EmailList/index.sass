@@ -1,0 +1,22 @@
+.email-list
+    border: 1px solid black
+    header
+        display: flex
+        padding-right: 5px //because of scrollbar
+        border-bottom: 2px solid black
+        div
+            flex: 1 1 0px
+            text-align: center
+            font-weight: bold
+            padding: 5px
+        div:nth-child(1)
+            flex-grow: 5
+        div:nth-child(2)
+            flex-grow: 2
+        div:nth-child(3)
+            flex-grow: 2
+        div:nth-child(4)
+            flex-grow: 1
+    .body
+        max-height: 300px
+        overflow-y: scroll

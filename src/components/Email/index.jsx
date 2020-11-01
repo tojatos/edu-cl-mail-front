@@ -1,7 +1,6 @@
 import React from 'react';
 
 function Email({title, sender, date, message}) {
-    console.log(message);
     return (
         <div className="email">
             <dl>
