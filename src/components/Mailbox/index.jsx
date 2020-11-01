@@ -22,6 +22,8 @@ function Mailbox({ mails, isLoading}) {
   const onEmailListItemClick = clickedId => setSelectedMailId(selectedMailId === clickedId ? undefined : clickedId)
   const onSearchChange = event => setSearchText(event.target.value.toLowerCase());
 
+  const isInitialized = mails.length !== 0;
+
   const senderOptions = mails
     .map(mail => mail.sender)
     .filter((x, i, a) => a.indexOf(x) === i) //unique
@@ -62,7 +64,7 @@ function Mailbox({ mails, isLoading}) {
   }
 
   if (isLoading) return <div className="mailbox"><LoadingSpinner /></div>;
-  if (mails.length === 0) return null;
+  if (!isInitialized) return null;
   return (
     <div className="mailbox">
       <div className="filters">
@@ -75,7 +77,6 @@ function Mailbox({ mails, isLoading}) {
             isMulti
           />
         </div>
-
         <div className="filter-group">
           <div className="filter-label">Filtruj po priorytecie</div>
           <Select
