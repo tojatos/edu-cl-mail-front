@@ -1,6 +1,11 @@
 .email-list-item
     display: flex
     justify-content: space-around
+    cursor: pointer
+    &.active
+        filter: invert(1)
+    &:nth-child(2n+1)
+        background: white
     &:nth-child(2n)
         background: #ebebff
     div

@@ -1,8 +1,8 @@
 import React from 'react';
 import './index.sass';
 
-const EmailListItem = ({ sender, title, priority, date, onClick }) =>
-    <div className="email-list-item" onClick={onClick}>
+const EmailListItem = ({ sender, title, priority, date, onClick, active }) =>
+    <div className={"email-list-item" + (active ? " active" : "")} onClick={onClick}>
         <div>{title}</div>
         <div>{sender}</div>
         <div>{date}</div>

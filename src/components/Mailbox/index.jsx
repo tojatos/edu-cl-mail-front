@@ -95,7 +95,7 @@ function Mailbox({ mails, isLoading}) {
           isOutsideRange={day => day.isAfter(maxDate, 'day') || day.isBefore(minDate, 'day')}
         />
       </div>
-      <EmailList mails={mails} onClick={onEmailListItemClick} />
+      <EmailList mails={mails} onClick={onEmailListItemClick} selectedMailId={selectedMailId} />
       <div>
         {selectedMail}
       </div>
