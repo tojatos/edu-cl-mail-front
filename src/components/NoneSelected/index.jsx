@@ -3,7 +3,7 @@ import './index.sass'
 
 function NoneSelected({text}) {
     return (
-        <div class="none-selected">
+        <div className="none-selected">
             <div>Wybierz {text}</div>
         </div>
     );
