@@ -66,34 +66,45 @@ function Mailbox({ mails, isLoading}) {
   return (
     <div className="mailbox">
       <div className="filters">
-        <Select
-          defaultValue={selectedSenderOptions}
-          onChange={v => setSelectedSenderOptions(v?.map(i => i.value))}
-          options={senderOptions}
-          isMulti
-        />
+        <div className="filter-group">
+          <div className="filter-label">Filtruj po nadawcy</div>
+          <Select
+            defaultValue={selectedSenderOptions}
+            onChange={v => setSelectedSenderOptions(v?.map(i => i.value))}
+            options={senderOptions}
+            isMulti
+          />
+        </div>
 
-        <Select
-          defaultValue={selectedPriorityOptions}
-          onChange={v => setSelectedPriorityOptions(v?.map(i => i.value))}
-          options={priorityOptions}
-          isMulti
-        />
-        <input type="text" placeholder="Szukaj w treści" onChange={onSearchChange} size="1" />
-        <DateRangePicker
-          startDate={startDate}
-          startDateId="start_date_id"
-          endDate={endDate}
-          endDateId="end_date_id"
-          onDatesChange={({ startDate, endDate }) => {
-            setStartDate(startDate);
-            setEndDate(endDate);
-          }
-          }
-          focusedInput={focusedDate}
-          onFocusChange={setFocusedDate}
-          isOutsideRange={day => day.isAfter(maxDate, 'day') || day.isBefore(minDate, 'day')}
-        />
+        <div className="filter-group">
+          <div className="filter-label">Filtruj po priorytecie</div>
+          <Select
+            defaultValue={selectedPriorityOptions}
+            onChange={v => setSelectedPriorityOptions(v?.map(i => i.value))}
+            options={priorityOptions}
+            isMulti
+          />
+        </div>
+        <div className="filter-group">
+          <div className="filter-label">Filtruj po dacie</div>
+          <DateRangePicker
+            startDate={startDate}
+            startDateId="start_date_id"
+            endDate={endDate}
+            endDateId="end_date_id"
+            onDatesChange={({ startDate, endDate }) => {
+              setStartDate(startDate);
+              setEndDate(endDate);
+            }}
+            focusedInput={focusedDate}
+            onFocusChange={setFocusedDate}
+            isOutsideRange={day => day.isAfter(maxDate, 'day') || day.isBefore(minDate, 'day')}
+          />
+        </div>
+        <div className="filter-group">
+          <div className="filter-label">Szukaj w tytule / treści</div>
+          <input type="text" placeholder="Szukaj w treści" onChange={onSearchChange} size="1" />
+        </div>
       </div>
       <EmailList mails={mails} onClick={onEmailListItemClick} selectedMailId={selectedMailId} />
       <div>
