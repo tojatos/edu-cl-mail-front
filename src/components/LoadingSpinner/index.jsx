@@ -2,9 +2,9 @@ import React from 'react';
 import circles from './circles.svg';
 import './index.sass';
 
-function LoadingSpinner() {
+function LoadingSpinner({size="100px"}) {
     return (
-        <img className="loading-spinner" src={circles} alt="Loading"/>
+        <img className="loading-spinner" src={circles} alt="Loading" style={{width: size}}/>
     );
 }
 

@@ -11,8 +11,8 @@ function App() {
     return (
         <div className="app">
             <div>
-                <GetMailsForm setMails={setMails} setIsLoading={setIsLoading}/>
-                <Mailbox mails={mails} isLoading={isLoading}/>
+                <GetMailsForm setMails={setMails} isLoading={isLoading} setIsLoading={setIsLoading}/>
+                <Mailbox mails={mails}/>
             </div>
             <Footer/>
         </div>

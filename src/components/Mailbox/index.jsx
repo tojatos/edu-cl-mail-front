@@ -7,7 +7,6 @@ import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { DateRangePicker } from 'react-dates';
 import moment from 'moment'
-import LoadingSpinner from '../LoadingSpinner';
 import './index.sass';
 
 function Mailbox({ mails, isLoading}) {
@@ -63,7 +62,6 @@ function Mailbox({ mails, isLoading}) {
     mails = mails.filter(m => m.title.toLowerCase().includes(searchText) || m.message.toLowerCase().includes(searchText))
   }
 
-  if (isLoading) return <div className="mailbox"><LoadingSpinner /></div>;
   if (!isInitialized) return null;
   return (
     <div className="mailbox">
