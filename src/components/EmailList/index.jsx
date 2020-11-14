@@ -11,15 +11,7 @@ function EmailList({ mails, onClick, selectedMailId }) {
             onClick={() => onClick(mail.id)} />)
     return (
         <div className="email-list">
-            <header>
-                <div>Temat</div>
-                <div>Nadawca</div>
-                <div>Data</div>
-                <div>Priorytet</div>
-            </header>
-            <div className="body">
-                {mail_list}
-            </div>
+            {mail_list}
         </div>
     );
 }

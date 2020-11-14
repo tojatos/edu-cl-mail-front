@@ -2,24 +2,27 @@
     display: flex
     justify-content: space-around
     cursor: pointer
-    &.active
-        filter: invert(1)
-    &:nth-child(2n+1)
+    flex-direction: column
+    border-bottom: 1px solid grey
+    background: #ebebff
+    &.active, &:hover
         background: white
-    &:nth-child(2n)
-        background: #ebebff
-    div
-        flex: 1 1 0px
-        text-overflow: ellipsis
-        overflow: hidden
-        height: 30px
-        white-space: nowrap
-        padding: 3px
-    div:nth-child(1)
-        flex-grow: 5
-    div:nth-child(2)
-        flex-grow: 2
-    div:nth-child(3)
-        flex-grow: 2
-    div:nth-child(4)
-        flex-grow: 1
+    > div
+        padding: 5px
+    > .top
+        display: flex
+        div
+            text-overflow: ellipsis
+            overflow: hidden
+            white-space: nowrap
+            flex-basis: 0
+            padding: 4px
+            &:nth-child(1)
+                flex-grow: 5
+            &:nth-child(2)
+                flex-grow: 1
+                text-align: right
+
+    > .bottom
+        font-size: 14px
+        font-weight: bold
