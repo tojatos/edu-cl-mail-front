@@ -75,7 +75,7 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
                     </div>
                     {errors.password && <span className="error">Hasło wymagane</span>}
                         <div className="form-group">
-                            <label htmlFor="amount">Ilość maili</label>
+                            <label htmlFor="amount">Liczba maili</label>
                             <div className="input-button-group">
                                 <input size="1" name="amount" type="number" value={amount} onChange={e => setAmount(Math.max(e.target.value, 0))}/>
                                 <button onClick={downloadAmount}>Pobierz maili: {amount}</button>
