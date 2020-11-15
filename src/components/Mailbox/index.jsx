@@ -64,7 +64,7 @@ function Mailbox({ mails, isLoading}) {
   }
   return (
     <div className="mailbox">
-      <div className="filters">
+      {/* <div className="filters">
         <div className="filter-group">
           <div className="filter-label">Filtruj po nadawcy</div>
           <Select
@@ -103,10 +103,10 @@ function Mailbox({ mails, isLoading}) {
           <div className="filter-label">Szukaj w tytule / treści</div>
           <input type="text" placeholder="Szukaj w treści" onChange={onSearchChange} size="1" />
         </div>
-      </div>
-      <EmailList mails={mails} onClick={onEmailListItemClick} selectedMailId={selectedMailId} />
-      <div>
-        {selectedMail}
+      </div> */}
+      <div className="inbox-container">
+        <EmailList mails={mails} onClick={onEmailListItemClick} selectedMailId={selectedMailId} />
+        <div> {selectedMail} </div>
       </div>
     </div>
   );
