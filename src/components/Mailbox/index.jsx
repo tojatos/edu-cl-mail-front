@@ -22,6 +22,7 @@ function Mailbox({ mails, isLoading}) {
   const onSearchChange = event => setSearchText(event.target.value.toLowerCase());
 
   const isInitialized = mails.length !== 0;
+  if (!isInitialized) return null;
 
   const senderOptions = mails
     .map(mail => mail.sender)
@@ -61,8 +62,6 @@ function Mailbox({ mails, isLoading}) {
   if (searchText.length > 0) {
     mails = mails.filter(m => m.title.toLowerCase().includes(searchText) || m.message.toLowerCase().includes(searchText))
   }
-
-  if (!isInitialized) return null;
   return (
     <div className="mailbox">
       <div className="filters">

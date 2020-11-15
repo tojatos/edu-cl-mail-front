@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useHistory } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import LoadingSpinner from '../LoadingSpinner';
@@ -8,23 +9,38 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
     const [amount, setAmount] = useState(30);
     const [shouldDownloadAll, setShouldDownloadAll] = useState(false);
     const { register, handleSubmit, errors } = useForm();
-    const onSubmit = async ({login, password}) => {
+    let history = useHistory();
+
+    const loadMails = async (getMails) => {
         setIsLoading(true);
+        const mails = await getMails();
+        if(mails) {
+            setMails(mails);
+            history.push('/mailbox')
+        }
+        setIsLoading(false);
+    };
+
+    const getApiMails = async (login, password) => {
         const url = shouldDownloadAll ? 'https://krzysztofruczkowski.pl:2020/api/get_mails' : `https://krzysztofruczkowski.pl:2020/api/get_mails/${amount}`;
+        let mails = null;
         try {
             const result = await axios.post(url, {username: login, password: password});
             if(Array.isArray(result.data)) {
-                let mails = result.data;
+                mails = result.data;
                 mails.forEach((e, i) => e.id = i);
-                setMails(mails)
             } else {
                 console.warn(result.data);
             }
         } catch (error) {
             console.error(error);
         } finally {
-            setIsLoading(false);
+            return mails;
         }
+    };
+
+    const onSubmit = async ({login, password}) => {
+        loadMails(async () => await getApiMails(login, password));
     }
 
     const downloadAmount = () => {
@@ -39,6 +55,7 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
         setIsLoading(true);
         const result = await axios.get('dummy_data.json');
         setMails(result.data);
+        history.push('/mailbox')
         setIsLoading(false);
     }
     // if (isLoading) return <div className="get-mails-container"><LoadingSpinner /></div>;
