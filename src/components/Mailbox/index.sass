@@ -5,6 +5,7 @@
     background: white
     .inbox-container
         display: flex
+        min-height: $mailbox_height
         >*
             flex-basis: 0
         >*:nth-child(1)
@@ -32,4 +33,3 @@
     .mailbox
         .inbox-container
             flex-direction: column
-            min-height: 90vh

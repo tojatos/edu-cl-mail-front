@@ -19,14 +19,22 @@ function linkify(inputText) {
     return replacedText;
 }
 
-function Email({title, sender, date, message}) {
+function Email({title, sender, receiver, date, message}) {
     return (
         <div className="email">
             <div className="info">
+                {sender &&
                 <div className="info-group">
                     <div>Nadawca:</div>
                     <div>{sender}</div>
                 </div>
+                }
+                {receiver &&
+                <div className="info-group">
+                    <div>Odbiorca:</div>
+                    <div>{receiver}</div>
+                </div>
+                }
                 <div className="info-group">
                     <div>Data:</div>
                     <div>{date}</div>
