@@ -12,6 +12,9 @@ function Navbar() {
                 <li>
                 <Link to="/mailbox">Przeglądaj maile</Link>
                 </li>
+                <li>
+                <Link to="/about">O stronie</Link>
+                </li>
             </ul>
         </nav>
     );

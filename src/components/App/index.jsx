@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import GetMailsForm from '../GetMailsForm';
 import Mailbox from '../Mailbox';
-import Footer from '../Footer';
+import About from '../About';
 import Navbar from '../Navbar';
 import './index.sass';
 
@@ -20,6 +20,11 @@ function App() {
             <Route path="/mailbox">
                 <MainView>
                     <Mailbox mails={mails}/>
+                </MainView>
+            </Route>
+            <Route path="/about">
+                <MainView>
+                    <About/>
                 </MainView>
             </Route>
             <Route path="/">
@@ -41,7 +46,7 @@ function MainView({children}) {
             <div>
                 {children}
             </div>
-            <Footer/>
+            <div></div> {/* dummy div for flexbox center */}
         </div>
     );
 }

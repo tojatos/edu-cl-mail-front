@@ -31,7 +31,7 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
     };
 
     const getDummyData = async () => {
-        const result = await axios.get('dummy_data.json');
+        const result = await axios.get(process.env.PUBLIC_URL + '/dummy_data.json');
         return result.data;
     }
 
