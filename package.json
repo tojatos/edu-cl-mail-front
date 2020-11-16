@@ -1,5 +1,6 @@
 {
   "name": "edu-cl-mail-front",
+  "homepage": "/edu-cl-mail",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

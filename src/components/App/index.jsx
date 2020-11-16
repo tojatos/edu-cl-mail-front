@@ -14,7 +14,7 @@ function App() {
     const [mails, setMails] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     return (
-        <Router>
+        <Router basename={process.env.PUBLIC_URL}>
         <div>
             <Switch>
             <Route path="/mailbox">
