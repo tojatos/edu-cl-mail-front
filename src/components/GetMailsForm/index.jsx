@@ -30,6 +30,12 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
         setIsLoading(false);
     };
 
+    const getDummyData = async () => {
+        const result = await axios.get('dummy_data.json');
+        return result.data;
+    }
+
+
     const getApiMails = async (login, password) => {
         const url = shouldDownloadAll ? getAllUrl : getAmountUrl();
         let mails = null;
@@ -52,6 +58,8 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
         loadMails(async () => await getApiMails(login, password));
     }
 
+    const onDummySubmit = async () => loadMails(async () => await getDummyData());
+
     const downloadAmount = () => {
         setShouldDownloadAll(false);
     };
@@ -60,13 +68,6 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
         setShouldDownloadAll(true);
     };
 
-    const setDummyData = async () => {
-        setIsLoading(true);
-        const result = await axios.get('dummy_data.json');
-        setMails(result.data);
-        history.push('/mailbox')
-        setIsLoading(false);
-    }
     // if (isLoading) return <div className="get-mails-container"><LoadingSpinner /></div>;
     return (
         <div className="relative-container">
@@ -98,7 +99,7 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
                     <button onClick={downloadAll}>Pobierz wszystkie maile</button>
                 </form>
                 <div className="small-or">lub</div>
-                <button type="button" onClick={setDummyData}>Pobierz testowe maile</button>
+                <button type="button" onClick={onDummySubmit}>Pobierz testowe maile</button>
             </div>
         </div>
     );
