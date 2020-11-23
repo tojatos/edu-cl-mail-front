@@ -9,7 +9,7 @@ import { DateRangePicker } from 'react-dates';
 import moment from 'moment'
 import './index.sass';
 
-function Mailbox({ mails, isLoading}) {
+function Mailbox({ mails }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [searchText, setSearchText] = useState("");
   const [selectedSenderOptions, setSelectedSenderOptions] = useState(undefined);
@@ -21,7 +21,7 @@ function Mailbox({ mails, isLoading}) {
   const onEmailListItemClick = clickedId => setSelectedMailId(selectedMailId === clickedId ? undefined : clickedId)
   const onSearchChange = event => setSearchText(event.target.value.toLowerCase());
 
-  const isInitialized = mails.length !== 0;
+  const isInitialized = mails && mails.length !== 0;
   if (!isInitialized) return null;
 
   const senderOptions = mails

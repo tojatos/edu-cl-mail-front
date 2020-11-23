@@ -1,20 +1,18 @@
-import React, {useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import React from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import { Link } from "react-router-dom";
 import { logUserOut } from '../../actions/userActions';
 import './index.sass';
 
 function Navbar() {
+    // @ts-ignore
     const userReducer = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
     return (
         <nav className="navbar">
             <ul className="left">
                 <li>
-                <Link to="/">Pobierz maile</Link>
-                </li>
-                <li>
-                <Link to="/mailbox">Przeglądaj maile</Link>
+                <Link to="/">Strona główna</Link>
                 </li>
                 <li>
                 <Link to="/about">O stronie</Link>
@@ -22,7 +20,10 @@ function Navbar() {
             </ul>
             <ul className="right">
                 <li>
-                { userReducer.loggedIn ?<button onClick={() => dispatch(logUserOut())}>Logout {userReducer.user.login}</button> : "" }
+                { userReducer.loggedIn ?
+                <button onClick={() => dispatch(logUserOut())}>Logout {userReducer.user.login}</button>
+                : <Link to="/login">Zaloguj się</Link>
+                }
                 </li>
             </ul>
         </nav>

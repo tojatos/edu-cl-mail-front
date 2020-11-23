@@ -87,7 +87,7 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
                     <div className="form-group">
                         <label htmlFor="amount">Liczba maili</label>
                         <div className="input-button-group">
-                            <input size="1" name="amount" type="number" value={amount} onChange={e => setAmount(Math.max(e.target.value, 0))}/>
+                            <input size={1} name="amount" type="number" value={amount} onChange={e => setAmount(Math.max(parseInt(e.target.value), 0))}/>
                             <Select
                                 defaultValue={inboxSelectOptions[0]}
                                 onChange={v => setInbox(v?.value)}
