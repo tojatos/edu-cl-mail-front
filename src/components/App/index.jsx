@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux';
 import {
   BrowserRouter as Router,
   Switch,
@@ -33,7 +33,7 @@ function App() {
             </Route>
             <Route path="/">
                 <MainView>
-                    { userReducer.loggedIn ?<button onClick={() => dispatch(logUserOut())}>Logout {userReducer.user.login}</button> : <LoginForm/> }
+                    { userReducer.loggedIn ? "" : <LoginForm/> }
                 </MainView>
             </Route>
             </Switch>
