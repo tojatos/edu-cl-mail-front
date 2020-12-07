@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import { useForm } from "react-hook-form";
-// import axios from 'axios';
 import LoadingSpinner from '../LoadingSpinner';
 import {useDispatch} from 'react-redux'
 import {checkLogin} from '../../actions/userActions'
@@ -9,33 +8,10 @@ import './index.sass';
 
 function LoginForm() {
     const { register, handleSubmit, errors } = useForm();
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading] = useState(false);
 
     const dispatch = useDispatch()
 
-    // const apiUrl = 'https://krzysztofruczkowski.pl:2020/api';
-    // const loginCheckUrl = `${apiUrl}/login_check`;
-
-
-    // const checkLogin = async ({login, password}) => {
-    //     try {
-    //         setIsLoading(true);
-    //         const result = await axios.post(loginCheckUrl, {username: login, password: password});
-    //         return result.data;
-    //     } catch (error) {
-    //         console.error(error);
-    //         return false;
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // };
-
-    // const onSubmit = async ({login, password}) => {
-    //     const status = await checkLogin({login, password});
-    //     console.log(status);
-    //     if(status) console.log("Logged in " + login);
-    //     else console.warn("Not logged in");
-    // }
     const onSubmit = ({login, password}) => {
         dispatch(checkLogin(login, password));
     }
@@ -61,12 +37,5 @@ function LoginForm() {
         </div>
     );
 }
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        checkLogin: (login, password) => dispatch(checkLogin(login, password))
-    }
-}
-
 
 export default LoginForm;

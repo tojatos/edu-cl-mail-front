@@ -16,7 +16,7 @@ function GetMailsForm({setMails, isLoading, setIsLoading}) {
     const { register, handleSubmit, errors } = useForm();
     let history = useHistory();
 
-    const apiUrl = 'https://krzysztofruczkowski.pl:2020/api';
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://krzysztofruczkowski.pl:2020/api';
     const getAllUrl = `${apiUrl}/get_mails`;
     const getAmountUrl = () => `${apiUrl}/inbox/${inbox}/${amount}`;
 

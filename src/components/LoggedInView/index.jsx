@@ -3,6 +3,7 @@ import Mailbox from '../Mailbox';
 import axios from 'axios';
 import './index.sass';
 import { useSelector } from 'react-redux';
+import {NotificationManager} from 'react-notifications';
 
 function LoggedInView() {
     // @ts-ignore
@@ -27,7 +28,7 @@ function LoggedInView() {
     //     return result.data;
     // }
 
-    const apiUrl = 'https://krzysztofruczkowski.pl:2020/api';
+    const apiUrl = process.env.REACT_APP_API_URL || 'https://krzysztofruczkowski.pl:2020/api';
     // const getAllUrl = `${apiUrl}/get_mails`;
     const inbox = "odbiorcza";
     const amount = "5";
@@ -39,20 +40,25 @@ function LoggedInView() {
             if(Array.isArray(result.data)) {
                 mails = result.data;
                 // mails.forEach((e, i) => e.id = i);
+                NotificationManager.success(`Pomyślnie pobrano ${result.data.length} maili.`);
+                return mails;
             } else {
                 console.warn(result.data);
             }
         } catch (error) {
             console.error(error);
-        } finally {
-            return mails;
+            NotificationManager.error('Nie udało się pobrać maili.');
         }
     };
 
     useEffect(() => {
         const setApiMails = async () => {
             let m = await getApiMails(userReducer.user.login, userReducer.user.password); //TODO: get mails for correct page
+            if(!m || m.length === 0) {
+                return;
+            }
             m = mails.concat(m);
+            console.log(m);
             m.forEach((e, i) => e.id = i);
             //TODO: get this^ from API
             setMails(m);
