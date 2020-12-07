@@ -9,7 +9,7 @@ import { DateRangePicker } from 'react-dates';
 import moment from 'moment'
 import './index.sass';
 
-function Mailbox({ mails }) {
+function Mailbox({ mails, loader }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [searchText, setSearchText] = useState("");
   const [selectedSenderOptions, setSelectedSenderOptions] = useState(undefined);
@@ -105,7 +105,7 @@ function Mailbox({ mails }) {
         </div>
       </div> */}
       <div className="inbox-container">
-        <EmailList mails={mails} onClick={onEmailListItemClick} selectedMailId={selectedMailId} />
+        <EmailList mails={mails} onClick={onEmailListItemClick} selectedMailId={selectedMailId} loader={loader}/>
         <div> {selectedMail} </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Mailbox from '../Mailbox';
 import axios from 'axios';
 import './index.sass';
@@ -8,13 +8,27 @@ function LoggedInView() {
     // @ts-ignore
     const userReducer = useSelector(state => state.userReducer);
     const [mails, setMails] = useState([]);
-    const getDummyData = async () => {
-        const result = await axios.get(process.env.PUBLIC_URL + '/dummy_data.json');
-        return result.data;
-    }
+    const [page, setPage] = useState(1);
+    const loader = useCallback(node => {
+        if (node !== null) {
+            const options = {
+                root: null,
+                rootMargin: "20px",
+                threshold: 1.0
+            };
+            const observer = new IntersectionObserver(handleObserver, options);
+            if (node) {
+                observer.observe(node);
+            }
+        }
+    }, []);
+    // const getDummyData = async () => {
+    //     const result = await axios.get(process.env.PUBLIC_URL + '/dummy_data.json');
+    //     return result.data;
+    // }
 
     const apiUrl = 'https://krzysztofruczkowski.pl:2020/api';
-    const getAllUrl = `${apiUrl}/get_mails`;
+    // const getAllUrl = `${apiUrl}/get_mails`;
     const inbox = "odbiorcza";
     const amount = "5";
     const getAmountUrl = () => `${apiUrl}/inbox/${inbox}/${amount}`;
@@ -24,7 +38,7 @@ function LoggedInView() {
             const result = await axios.post(getAmountUrl(), {username: login, password: password});
             if(Array.isArray(result.data)) {
                 mails = result.data;
-                mails.forEach((e, i) => e.id = i);
+                // mails.forEach((e, i) => e.id = i);
             } else {
                 console.warn(result.data);
             }
@@ -34,22 +48,28 @@ function LoggedInView() {
             return mails;
         }
     };
+
     useEffect(() => {
-        // const setDummyMails = async () => {
-        //     const m = await getDummyData();
-        //     setMails(m);
-        // };
-        // setDummyMails();
         const setApiMails = async () => {
-            const m = await getApiMails(userReducer.user.login, userReducer.user.password);
+            let m = await getApiMails(userReducer.user.login, userReducer.user.password); //TODO: get mails for correct page
+            m = mails.concat(m);
+            m.forEach((e, i) => e.id = i);
+            //TODO: get this^ from API
             setMails(m);
         };
         setApiMails();
-    }, [])
+    }, [page, userReducer.user.login, userReducer.user.password]);
+
+    const handleObserver = (entities) => {
+        const target = entities[0];
+        if (target.isIntersecting) {
+            setPage((page) => page + 1)
+        }
+    }
 
     return (
         <div>
-        <Mailbox mails={mails}/>
+        <Mailbox mails={mails} loader={loader}/>
         </div>
     );
 
