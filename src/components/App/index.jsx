@@ -11,6 +11,7 @@ import LoginForm from '../LoginForm';
 import LoggedInView from '../LoggedInView';
 import About from '../About';
 import Navbar from '../Navbar';
+import {AppBar, Button, Container, Grid, IconButton, Toolbar, Typography} from "@material-ui/core";
 
 function App() {
     const userReducer = useSelector(state => state.userReducer)
@@ -42,13 +43,14 @@ function App() {
 
 function MainView({children}) {
     return (
-        <div className="app">
+        <>
             <Navbar />
-            <div>
-                {children}
-            </div>
-            <div></div> {/* dummy div for flexbox center */}
-        </div>
+            <Container>
+                <Grid container>
+                    {children}
+                </Grid>
+            </Container>
+        </>
     );
 }
 
