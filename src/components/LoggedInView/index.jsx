@@ -40,7 +40,7 @@ function LoggedInView() {
             if(Array.isArray(result.data)) {
                 mails = result.data;
                 // mails.forEach((e, i) => e.id = i);
-                NotificationManager.success(`Pomyślnie pobrano ${result.data.length} maili.`);
+                // NotificationManager.success(`Pomyślnie pobrano ${result.data.length} maili.`);
                 return mails;
             } else {
                 console.warn(result.data);

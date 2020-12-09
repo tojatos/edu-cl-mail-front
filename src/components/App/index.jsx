@@ -46,9 +46,7 @@ function MainView({children}) {
         <>
             <Navbar />
             <Container>
-                <Grid container>
-                    {children}
-                </Grid>
+                {children}
             </Container>
         </>
     );
