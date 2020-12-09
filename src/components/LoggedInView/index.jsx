@@ -31,8 +31,8 @@ function LoggedInView() {
     const apiUrl = process.env.REACT_APP_API_URL || 'https://krzysztofruczkowski.pl:2020/api';
     // const getAllUrl = `${apiUrl}/get_mails`;
     const inbox = "odbiorcza";
-    const amount = "5";
-    const getAmountUrl = () => `${apiUrl}/inbox/${inbox}/${amount}`;
+    // const amount = "5";
+    const getAmountUrl = () => `${apiUrl}/inbox_page/${inbox}/${page}`;
     const getApiMails = async (login, password) => {
         let mails = null;
         try {
@@ -58,11 +58,11 @@ function LoggedInView() {
                 return;
             }
             m = mails.concat(m);
-            console.log(m);
             m.forEach((e, i) => e.id = i);
             //TODO: get this^ from API
             setMails(m);
         };
+        // noinspection JSIgnoredPromiseFromCall
         setApiMails();
     }, [page, userReducer.user.login, userReducer.user.password]);
 
