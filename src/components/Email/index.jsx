@@ -1,5 +1,4 @@
 import React from 'react';
-import './index.sass';
 import {Box, Paper, Typography} from "@material-ui/core";
 import moment from "moment";
 

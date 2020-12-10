@@ -16,7 +16,7 @@ export const checkLogin = (login, password) => async dispatch => {
     try {
         const result = await axios.post(loginCheckUrl, {username: login, password: password});
 
-        if(result.data) {
+        if(result.data === true) {
             NotificationManager.success('Pomyślnie zalogowano');
             dispatch(setUser({login, password}));
         }

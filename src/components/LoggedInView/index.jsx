@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import Mailbox from '../Mailbox';
 import axios from 'axios';
-import './index.sass';
 import { useSelector } from 'react-redux';
 import {NotificationManager} from 'react-notifications';
 

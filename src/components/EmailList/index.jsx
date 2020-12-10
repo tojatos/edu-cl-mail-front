@@ -1,6 +1,5 @@
 import React from 'react';
 import EmailListItem from '../EmailListItem';
-import './index.sass';
 import {List, makeStyles} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({

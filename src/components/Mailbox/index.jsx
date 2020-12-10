@@ -2,33 +2,9 @@ import React, { useState } from 'react';
 import EmailList from '../EmailList';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
-import './index.sass';
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, Modal} from "@material-ui/core";
+import {Button, Dialog, DialogActions, DialogContent} from "@material-ui/core";
 import NoneSelected from "../NoneSelected";
 import Email from "../Email";
-
-// function getModalStyle() {
-//   const top = 50;
-//   const left = 50;
-//
-//   return {
-//     top: `${top}%`,
-//     left: `${left}%`,
-//     transform: `translate(-${top}%, -${left}%)`,
-//   };
-// }
-//
-// const useStyles = makeStyles((theme) => ({
-//   paper: {
-//     position: 'absolute',
-//     maxWidth: '95%',
-//     backgroundColor: theme.palette.background.paper,
-//     border: '2px solid #000',
-//     boxShadow: theme.shadows[5],
-//     padding: theme.spacing(2, 4, 3),
-//   },
-// }));
-
 function Mailbox({ mails, loader }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [openDialog, setOpenDialog] = useState(false);

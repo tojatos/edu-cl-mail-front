@@ -10,11 +10,14 @@ import {NotificationContainer} from "react-notifications";
 import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import {CssBaseline} from "@material-ui/core";
 import './index.sass';
+import {blue, pink} from "@material-ui/core/colors";
 
 const store = createStore(rootReducer, applyMiddleware(thunk))
 const theme = createMuiTheme({
     palette: {
         type: 'dark',
+        primary: blue,
+        secondary: pink,
     },
 });
 

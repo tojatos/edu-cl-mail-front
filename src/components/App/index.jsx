@@ -1,4 +1,3 @@
-import './index.sass';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {
@@ -11,7 +10,7 @@ import LoginForm from '../LoginForm';
 import LoggedInView from '../LoggedInView';
 import About from '../About';
 import Navbar from '../Navbar';
-import {AppBar, Button, Container, Grid, IconButton, Toolbar, Typography} from "@material-ui/core";
+import {Container} from "@material-ui/core";
 
 function App() {
     const userReducer = useSelector(state => state.userReducer)
@@ -19,11 +18,6 @@ function App() {
         <Router basename={process.env.PUBLIC_URL}>
         <div>
             <Switch>
-            <Route path="/about">
-                <MainView>
-                    <About/>
-                </MainView>
-            </Route>
             <Route path="/login">
                 <MainView>
                     { userReducer.loggedIn ? <Redirect to="/"/> : <LoginForm/> }
@@ -31,7 +25,7 @@ function App() {
             </Route>
             <Route path="/">
                 <MainView>
-                    { userReducer.loggedIn ? <LoggedInView/> : "Welcome" }
+                    { userReducer.loggedIn ? <LoggedInView/> : <About/> }
                 </MainView>
             </Route>
             </Switch>
