@@ -169,7 +169,7 @@ function Navbar() {
             <List>
                 {
                     inboxes.map(i =>
-                        <ListItem button onClick={i.action}>
+                        <ListItem button onClick={i.action} key={i.name}>
                             <ListItemIcon>{i.icon}</ListItemIcon>
                             <ListItemText primary={i.name}/>
                         </ListItem>
