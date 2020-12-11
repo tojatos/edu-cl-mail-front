@@ -9,8 +9,8 @@ function Mailbox({ mails, loader }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [openDialog, setOpenDialog] = useState(false);
 
-  const getMailById = mailId => mails.filter(e => e.id === selectedMailId)[0];
-     console.log(getMailById(selectedMailId))
+  // const getMailById = mailId => mails.filter(e => e.id === selectedMailId)[0];
+     // console.log(getMailById(selectedMailId))
 
   const selectedMail = (
       <div>

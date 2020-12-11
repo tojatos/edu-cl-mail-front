@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {NotificationManager} from 'react-notifications';
+import {enqueueSnackbarError, enqueueSnackbarSuccess} from "./notificationActions";
 
 const apiUrl = process.env.REACT_APP_API_URL || 'https://krzysztofruczkowski.pl:2020/api';
 const loginCheckUrl = `${apiUrl}/login_check`;
@@ -17,14 +17,15 @@ export const checkLogin = (login, password) => async dispatch => {
         const result = await axios.post(loginCheckUrl, {username: login, password: password});
 
         if(result.data === true) {
-            NotificationManager.success('Pomyślnie zalogowano');
             dispatch(setUser({login, password}));
+            dispatch(enqueueSnackbarSuccess('Pomyślnie zalogowano'));
         }
         else {
-            NotificationManager.error('Nieprawidłowy login lub hasło', 'Nie udało się zalogować');
+            console.log(enqueueSnackbarSuccess('Pomyślnie zalogowano'));
+            dispatch(enqueueSnackbarError('Nieprawidłowy login lub hasło'));
         }
     } catch (error) {
-        NotificationManager.error('Nie udało się połączyć z serwerem.');
+        dispatch(enqueueSnackbarError('Nie udało się połączyć z serwerem.'));
         console.error(error);
     }
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from "react-hook-form";
 import {useDispatch} from 'react-redux'
-import {checkLogin} from '../../actions/userActions'
+import {checkLogin} from '../../redux/actions/userActions'
 import {Box, Button, Grid, Paper, TextField} from "@material-ui/core";
 
 

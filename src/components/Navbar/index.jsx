@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { Link as RouterLink } from "react-router-dom";
-import { logUserOut } from '../../actions/userActions';
+import { logUserOut } from '../../redux/actions/userActions';
 import {
     AppBar,
     Button,

@@ -1,10 +1,11 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import Mailbox from '../Mailbox';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import {NotificationManager} from 'react-notifications';
+import {useDispatch, useSelector} from 'react-redux';
+import {enqueueSnackbarError} from "../../redux/actions/notificationActions";
 
 function LoggedInView() {
+    const dispatch = useDispatch();
     // @ts-ignore
     const userReducer = useSelector(state => state.userReducer);
     const [mails, setMails] = useState([]);
@@ -39,14 +40,14 @@ function LoggedInView() {
             if(Array.isArray(result.data)) {
                 mails = result.data;
                 // mails.forEach((e, i) => e.id = i);
-                // NotificationManager.success(`Pomyślnie pobrano ${result.data.length} maili.`);
                 return mails;
             } else {
                 console.warn(result.data);
             }
         } catch (error) {
             console.error(error);
-            NotificationManager.error('Nie udało się pobrać maili.');
+            dispatch(enqueueSnackbarError('Nie udało się pobrać maili.'))
+
         }
     };
 
