@@ -27,7 +27,7 @@ import DraftsIcon from "@material-ui/icons/Drafts";
 import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import TrashIcon from "@material-ui/icons/Delete";
 import { logoutUser } from "../../redux/user/userSlice";
-
+import { useLocation } from "react-router-dom";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,6 +97,7 @@ function Navbar() {
   const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
+  const location = useLocation();
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => setOpen(true);
@@ -155,11 +156,11 @@ function Navbar() {
             <Button color="inherit" onClick={() => dispatch(logoutUser())}>
               Logout
             </Button>
-          ) : (
+          ) : location.pathname !== "/login" ? (
             <Link color="inherit" component={RouterLink} to="/login">
               <Button color="inherit">Login</Button>
             </Link>
-          )}
+          ) : null}
         </Toolbar>
       </AppBar>
       <Drawer
