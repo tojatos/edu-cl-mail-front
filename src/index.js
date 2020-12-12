@@ -22,11 +22,13 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
+import notificationReducer from "./redux/reducers/notificationReducer";
 
 const persistConfig = {
   key: "root",
   version: 1,
-  storage,
+  storage: storage,
+  blacklist: [notificationReducer],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,7 +1,12 @@
 import axios from "axios";
 import { createSlice } from "@reduxjs/toolkit";
 import { enqueueSnackbarError } from "../actions/notificationActions";
-import { GET_INBOX_AMOUNT_URL } from "../../shared";
+import {
+  GET_INBOX_ALL_URL,
+  GET_INBOX_AMOUNT_URL,
+  INBOXES,
+  INITIAL_MAIL_AMOUNT,
+} from "../../shared";
 
 export const FETCH_STATES = {
   STARTING: "STARTING",
@@ -13,19 +18,33 @@ export const FETCH_STATES = {
 const mailsSlice = createSlice({
   name: "mails",
   initialState: {
-    fetchState: FETCH_STATES.STARTING,
+    fetchStates: {},
     mails: {},
   },
   reducers: {
-    addMails(state, action) {
+    initMails(state, action) {
       const { inbox, mails } = action.payload;
-      if (state.fetchState === FETCH_STATES.STARTING) {
+      if (!state.fetchStates[inbox])
+        state.fetchStates[inbox] = FETCH_STATES.STARTING;
+      if (state.fetchStates[inbox] === FETCH_STATES.STARTING) {
         if (!state.mails[inbox]) state.mails[inbox] = [];
-        state.mails[inbox] = state.mails[inbox].concat(mails);
+        state.mails[inbox] = mails;
         state.mails[inbox].forEach((e, i) => (e.id = i));
-        state.fetchState = FETCH_STATES.INITIALIZED;
+        //TODO: get this^ from API
+
+        state.fetchStates[inbox] = FETCH_STATES.INITIALIZED;
+        // if every inbox is fetched
+        // if (Object.values(INBOXES).every((i) => state.mails[i]))
       }
+    },
+    setAllMails(state, action) {
+      const { inbox, mails } = action.payload;
+      if (!state.mails[inbox]) state.mails[inbox] = [];
+      state.mails[inbox] = mails;
+      state.mails[inbox].forEach((e, i) => (e.id = i));
       //TODO: get this^ from API
+
+      state.fetchStates[inbox] = FETCH_STATES.COMPLETED;
     },
     cleanMails(state) {
       state.mails = {};
@@ -33,23 +52,53 @@ const mailsSlice = createSlice({
   },
 });
 
-export const { addMails, cleanMails } = mailsSlice.actions;
+export const { initMails, cleanMails, setAllMails } = mailsSlice.actions;
 export default mailsSlice.reducer;
 
-export const getApiMails = (login, password, inbox) => async (dispatch) => {
+export const initializeInboxes = (login, password) => async (dispatch) => {
+  Object.values(INBOXES).forEach((i) => {
+    dispatch(getMailsInitial(login, password, i));
+    dispatch(getMailsAll(login, password, i));
+  });
+};
+export const getMailsInitial = (login, password, inbox) => async (dispatch) => {
   try {
-    const result = await axios.post(GET_INBOX_AMOUNT_URL(inbox, 15), {
+    const result = await axios.post(
+      GET_INBOX_AMOUNT_URL(inbox, INITIAL_MAIL_AMOUNT),
+      {
+        username: login,
+        password: password,
+      }
+    );
+    if (Array.isArray(result.data)) {
+      let mails = result.data;
+      dispatch(initMails({ inbox, mails }));
+    } else {
+      console.warn(result.data);
+    }
+  } catch (error) {
+    console.warn(error);
+    // dispatch(
+    //   enqueueSnackbarError("Nie udało się pobrać maili ze skrzynki " + inbox)
+    // );
+  }
+};
+export const getMailsAll = (login, password, inbox) => async (dispatch) => {
+  try {
+    const result = await axios.post(GET_INBOX_ALL_URL(inbox), {
       username: login,
       password: password,
     });
     if (Array.isArray(result.data)) {
       let mails = result.data;
-      dispatch(addMails({ inbox, mails }));
+      dispatch(setAllMails({ inbox, mails }));
     } else {
       console.warn(result.data);
     }
   } catch (error) {
-    console.error(error);
-    dispatch(enqueueSnackbarError("Nie udało się pobrać maili."));
+    console.warn(error);
+    // dispatch(
+    //   enqueueSnackbarError("Nie udało się pobrać maili ze skrzynki " + inbox)
+    // );
   }
 };

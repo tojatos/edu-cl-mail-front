@@ -5,6 +5,8 @@ import { List, makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
+    padding: 0,
+    margin: "20px 0",
   },
   inline: {
     display: "inline",

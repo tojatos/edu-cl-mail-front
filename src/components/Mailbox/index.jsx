@@ -1,18 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EmailList from "../EmailList";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import {
+  Backdrop,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
 } from "@material-ui/core";
 import NoneSelected from "../NoneSelected";
 import Email from "../Email";
-function Mailbox({ mails }) {
+import { useDispatch, useSelector } from "react-redux";
+import {
+  FETCH_STATES,
+  getMailsAll,
+  initializeInboxes,
+} from "../../redux/mails/mailsSlice";
+function Mailbox({ inbox }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [openDialog, setOpenDialog] = useState(false);
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userData);
+  const mailData = useSelector((state) => state.mailData);
+  // const [mails, setMails] = useState([]);
+  useEffect(() => {
+    if (
+      !mailData.fetchStates[inbox] ||
+      mailData.fetchStates[inbox] === FETCH_STATES.STARTING
+    ) {
+      // dispatch(getApiMails(userData.user.login, userData.user.password, inbox));
+      dispatch(initializeInboxes(userData.user.login, userData.user.password));
+    }
+    if (mailData.fetchStates[inbox] === FETCH_STATES.INITIALIZED) {
+      dispatch(getMailsAll(userData.user.login, userData.user.password, inbox));
+    }
+
+    // TODO: other states
+  }, [
+    dispatch,
+    mailData.fetchStates,
+    userData.user.login,
+    userData.user.password,
+  ]);
+  const mails = mailData.mails[inbox] || [];
 
   // const getMailById = mailId => mails.filter(e => e.id === selectedMailId)[0];
   // console.log(getMailById(selectedMailId))
@@ -43,8 +75,8 @@ function Mailbox({ mails }) {
   };
   // const onSearchChange = event => setSearchText(event.target.value.toLowerCase());
 
-  const isInitialized = mails && mails.length !== 0;
-  if (!isInitialized) return null;
+  // const isInitialized = mails && mails.length !== 0;
+  // if (!isInitialized) return null;
 
   // const senderOptions = mails
   //   .map(mail => mail.sender)
@@ -87,6 +119,14 @@ function Mailbox({ mails }) {
 
   return (
     <div className="mailbox">
+      <Backdrop
+        open={
+          !mailData.fetchStates[inbox] ||
+          mailData.fetchStates[inbox] === FETCH_STATES.STARTING
+        }
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       {/* <div className="filters">
         <div className="filter-group">
           <div className="filter-label">Filtruj po nadawcy</div>
