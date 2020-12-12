@@ -1,19 +1,20 @@
 import React from 'react';
-import Link from '../Link';
-import './index.sass'
+import {Link, Paper, ListItem, List, ListItemText} from "@material-ui/core";
 
 function About() {
     return (
-        <div className="about">
-            <span>Strona służąca do pobierania maili z edukacja.cl</span>
-            <span>Aby zalogować się, należy podać dane logowania do edukacja.cl</span>
-            <span>Dane logowania nie są zapamiętywane.</span>
-            <span></span>
-            <span></span>
-            <span>Autor: <Link href='https://krzysztofruczkowski.pl' value='Krzysztof Ruczkowski'/></span>
-            <span>Kod źródłowy frontendu: <Link href='https://github.com/tojatos/edu-cl-mail-front' value='edu-cl-mail-front'/></span>
-            <span>Kod źródłowy backendu: <Link href='https://github.com/tojatos/edu-cl-mail' value='edu-cl-mail'/></span>
-        </div>
+        <Paper>
+            <List>
+                <ListItem><ListItemText primary="Strona służąca do pobierania maili z edukacja.cl"/></ListItem>
+                <ListItem><ListItemText primary="Aby zalogować się, należy podać dane logowania do edukacja.cl"/></ListItem>
+                <ListItem><ListItemText primary="Dane logowania nie są zapamiętywane."/></ListItem>
+                <ListItem/>
+                <ListItem/>
+                <ListItem><ListItemText primary="Autor" secondary={<Link target="_blank" href='https://krzysztofruczkowski.pl'>Krzysztof Ruczkowski</Link>}/></ListItem>
+                <ListItem><ListItemText primary="Kod źródłowy frontendu" secondary={<Link target="_blank" href='https://github.com/tojatos/edu-cl-mail-front'>edu-cl-mail-front</Link>}/></ListItem>
+                <ListItem><ListItemText primary="Kod źródłowy backendu" secondary={<Link target="_blank" href='https://github.com/tojatos/edu-cl-mail'>edu-cl-mail</Link>}/></ListItem>
+            </List>
+        </Paper>
     );
 }
 

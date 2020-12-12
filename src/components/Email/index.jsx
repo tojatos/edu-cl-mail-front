@@ -1,5 +1,6 @@
 import React from 'react';
-import './index.sass';
+import {Box, Paper, Typography} from "@material-ui/core";
+import moment from "moment";
 
 function linkify(inputText) {
     var replacedText, replacePattern1, replacePattern2, replacePattern3;
@@ -20,32 +21,19 @@ function linkify(inputText) {
 }
 
 function Email({title, sender, receiver, date, message}) {
+    const dateMoment = moment(date, 'YYYY-MM-DD HH:mm:ss');
+    const displayedDate = dateMoment.format('DD.MM.YYYY HH:mm');
     return (
-        <div className="email">
-            <div className="info">
-                {sender &&
-                <div className="info-group">
-                    <div>Nadawca:</div>
-                    <div>{sender}</div>
-                </div>
-                }
-                {receiver &&
-                <div className="info-group">
-                    <div>Odbiorca:</div>
-                    <div>{receiver}</div>
-                </div>
-                }
-                <div className="info-group">
-                    <div>Data:</div>
-                    <div>{date}</div>
-                </div>
-                <div className="info-group">
-                    <div>Tytuł:</div>
-                    <div>{title}</div>
-                </div>
-            </div>
-            <div className="body" dangerouslySetInnerHTML={{__html: linkify(message.replace(/(?:\r\n|\r|\n)/g, '<br>'))}}></div>
-        </div>
+        <Paper elevation={0}>
+            <Typography variant="h6">{title}</Typography>
+            <Typography variant="subtitle1">{sender || receiver}</Typography>
+            <Typography variant="subtitle2">{displayedDate}</Typography>
+            <Paper elevation={6}>
+                <Box p={3} m={2}>
+                    <div className="body" dangerouslySetInnerHTML={{__html: linkify(message.replace(/(?:\r\n|\r|\n)/g, '<br>'))}}/>
+                </Box>
+            </Paper>
+        </Paper>
     );
 }
 
