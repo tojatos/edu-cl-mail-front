@@ -1,8 +1,16 @@
 import notificationReducer from "./notificationReducer";
 import { combineReducers } from "redux";
-import userReducer from "../user/userSlice";
+import userReducer, { logoutUser } from "../user/userSlice";
+import mailsReducer from "../mails/mailsSlice";
 
-export default combineReducers({
-  user: userReducer,
+const appReducer = combineReducers({
+  userData: userReducer,
+  mailData: mailsReducer,
   notificationReducer,
 });
+const rootReducer = (state, action) => {
+  if (action.type === logoutUser.type) state = undefined;
+  return appReducer(state, action);
+};
+
+export default rootReducer;

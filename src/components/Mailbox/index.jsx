@@ -1,26 +1,33 @@
-import React, { useState } from 'react';
-import EmailList from '../EmailList';
-import 'react-dates/initialize';
-import 'react-dates/lib/css/_datepicker.css';
-import {Button, Dialog, DialogActions, DialogContent} from "@material-ui/core";
+import React, { useState } from "react";
+import EmailList from "../EmailList";
+import "react-dates/initialize";
+import "react-dates/lib/css/_datepicker.css";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+} from "@material-ui/core";
 import NoneSelected from "../NoneSelected";
 import Email from "../Email";
-function Mailbox({ mails, loader }) {
+function Mailbox({ mails }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [openDialog, setOpenDialog] = useState(false);
 
   // const getMailById = mailId => mails.filter(e => e.id === selectedMailId)[0];
-     // console.log(getMailById(selectedMailId))
+  // console.log(getMailById(selectedMailId))
 
   const selectedMail = (
-      <div>
-        {
-          selectedMailId !== undefined ?
-              mails.filter(e => e.id === selectedMailId).map(e => <Email {...e} />)[0] :
-              <NoneSelected text="mail"/>
-        }
-      </div>
-);
+    <div>
+      {selectedMailId !== undefined ? (
+        mails
+          .filter((e) => e.id === selectedMailId)
+          .map((e) => <Email {...e} />)[0]
+      ) : (
+        <NoneSelected text="mail" />
+      )}
+    </div>
+  );
 
   // const [searchText, setSearchText] = useState("");
   // const [selectedSenderOptions, setSelectedSenderOptions] = useState(undefined);
@@ -30,10 +37,10 @@ function Mailbox({ mails, loader }) {
   // const [focusedDate, setFocusedDate] = useState(null)
 
   // const onEmailListItemClick = clickedId => setSelectedMailId(selectedMailId === clickedId ? undefined : clickedId)
-  const onEmailListItemClick = clickedId => {
-    setSelectedMailId(selectedMailId === clickedId ? undefined : clickedId)
-    setOpenDialog(true)
-  }
+  const onEmailListItemClick = (clickedId) => {
+    setSelectedMailId(clickedId);
+    setOpenDialog(true);
+  };
   // const onSearchChange = event => setSearchText(event.target.value.toLowerCase());
 
   const isInitialized = mails && mails.length !== 0;
@@ -121,18 +128,19 @@ function Mailbox({ mails, loader }) {
         </div>
       </div> */}
       <div className="inbox-container">
-        <EmailList mails={mails} onClick={onEmailListItemClick} selectedMailId={selectedMailId} loader={loader}/>
-        {/*<div> {selectedMail} </div>*/}
+        <EmailList
+          mails={mails}
+          onClick={onEmailListItemClick}
+          selectedMailId={selectedMailId}
+        />
         <Dialog
-            fullWidth
-            maxWidth="lg"
-            scroll="paper"
-            open={openDialog}
-            onClose={() => setOpenDialog(false)}
+          fullWidth
+          maxWidth="lg"
+          scroll="paper"
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
         >
-          <DialogContent>
-            {selectedMail}
-          </DialogContent>
+          <DialogContent>{selectedMail}</DialogContent>
           <DialogActions>
             <Button onClick={() => setOpenDialog(false)} color="primary">
               Close

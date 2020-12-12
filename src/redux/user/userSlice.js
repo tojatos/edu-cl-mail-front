@@ -4,10 +4,7 @@ import {
   enqueueSnackbarError,
   enqueueSnackbarSuccess,
 } from "../actions/notificationActions";
-
-const apiUrl =
-  process.env.REACT_APP_API_URL || "https://krzysztofruczkowski.pl:2020/api";
-const loginCheckUrl = `${apiUrl}/login_check`;
+import { LOGIN_CHECK_URL } from "../../shared";
 
 const userSlice = createSlice({
   name: "user",
@@ -18,7 +15,7 @@ const userSlice = createSlice({
   reducers: {
     loginUser(state, action) {
       state.loggedIn = true;
-      state.user = { ...action.payload };
+      state.user = action.payload;
     },
     logoutUser(state) {
       state.loggedIn = false;
@@ -32,7 +29,7 @@ export default userSlice.reducer;
 
 export const checkLogin = (login, password) => async (dispatch) => {
   try {
-    const result = await axios.post(loginCheckUrl, {
+    const result = await axios.post(LOGIN_CHECK_URL, {
       username: login,
       password: password,
     });

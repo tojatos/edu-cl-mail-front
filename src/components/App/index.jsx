@@ -13,18 +13,20 @@ import Navbar from "../Navbar";
 import { Container } from "@material-ui/core";
 
 function App() {
-  const user = useSelector((state) => state.user);
+  const userData = useSelector((state) => state.userData);
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <div>
         <Switch>
           <Route path="/login">
             <MainView>
-              {user.loggedIn ? <Redirect to="/" /> : <LoginForm />}
+              {userData?.loggedIn ? <Redirect to="/" /> : <LoginForm />}
             </MainView>
           </Route>
           <Route path="/">
-            <MainView>{user.loggedIn ? <LoggedInView /> : <About />}</MainView>
+            <MainView>
+              {userData?.loggedIn ? <LoggedInView /> : <About />}
+            </MainView>
           </Route>
         </Switch>
       </div>

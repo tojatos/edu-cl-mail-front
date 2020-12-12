@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Navbar() {
-  const user = useSelector((state) => state.user);
+  const userData = useSelector((state) => state.userData);
   const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -104,7 +104,7 @@ function Navbar() {
   const handleDrawerClose = () => setOpen(false);
 
   // close drawer on logout
-  !user.loggedIn && open && handleDrawerClose();
+  !userData.loggedIn && open && handleDrawerClose();
 
   const inboxes = [
     {
@@ -138,7 +138,7 @@ function Navbar() {
         })}
       >
         <Toolbar>
-          {user.loggedIn ? (
+          {userData.loggedIn ? (
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -150,9 +150,9 @@ function Navbar() {
             </IconButton>
           ) : null}
           <Typography variant="h6" className={classes.title}>
-            {user.user.login}
+            {userData.user.login}
           </Typography>
-          {user.loggedIn ? (
+          {userData.loggedIn ? (
             <Button color="inherit" onClick={() => dispatch(logoutUser())}>
               Logout
             </Button>
