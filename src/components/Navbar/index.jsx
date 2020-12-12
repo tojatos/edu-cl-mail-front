@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
   AppBar,
   Button,
@@ -27,7 +27,8 @@ import DraftsIcon from "@material-ui/icons/Drafts";
 import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import TrashIcon from "@material-ui/icons/Delete";
 import { logoutUser } from "../../redux/user/userSlice";
-import { useLocation } from "react-router-dom";
+import { setCurrentInbox } from "../../redux/mails/mailsSlice";
+import { INBOX_NAMES, INBOXES } from "../../shared";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar() {
   const userData = useSelector((state) => state.userData);
+  const currentInbox = useSelector((state) => state.mailData.currentInbox);
   const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -108,24 +110,28 @@ function Navbar() {
 
   const inboxes = [
     {
-      name: "Odbiorcza",
+      name: INBOX_NAMES.ODBIORCZA,
+      id: INBOXES.ODBIORCZA,
       icon: <MailIcon />,
-      action: () => alert("test"),
+      action: () => dispatch(setCurrentInbox(INBOXES.ODBIORCZA)),
     },
     {
-      name: "Nadawcza",
+      name: INBOX_NAMES.NADAWCZA,
+      id: INBOXES.NADAWCZA,
       icon: <UnarchiveIcon />,
-      action: () => alert("test"),
+      action: () => dispatch(setCurrentInbox(INBOXES.NADAWCZA)),
     },
     {
-      name: "Robocza",
+      name: INBOX_NAMES.ROBOCZA,
+      id: INBOXES.ROBOCZA,
       icon: <DraftsIcon />,
-      action: () => alert("test"),
+      action: () => dispatch(setCurrentInbox(INBOXES.ROBOCZA)),
     },
     {
-      name: "Usunięte",
+      name: INBOX_NAMES.USUNIETE,
+      id: INBOXES.USUNIETE,
       icon: <TrashIcon />,
-      action: () => alert("test"),
+      action: () => dispatch(setCurrentInbox(INBOXES.USUNIETE)),
     },
   ];
 
@@ -184,7 +190,12 @@ function Navbar() {
         <Divider />
         <List>
           {inboxes.map((i) => (
-            <ListItem button onClick={i.action} key={i.name}>
+            <ListItem
+              button
+              onClick={i.action}
+              key={i.name}
+              selected={currentInbox === i.id}
+            >
               <ListItemIcon>{i.icon}</ListItemIcon>
               <ListItemText primary={i.name} />
             </ListItem>

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { createSlice } from "@reduxjs/toolkit";
-import { enqueueSnackbarError } from "../actions/notificationActions";
 import {
   GET_INBOX_ALL_URL,
   GET_INBOX_AMOUNT_URL,
@@ -18,6 +17,7 @@ export const FETCH_STATES = {
 const mailsSlice = createSlice({
   name: "mails",
   initialState: {
+    currentInbox: INBOXES.ODBIORCZA,
     fetchStates: {},
     mails: {},
   },
@@ -46,13 +46,21 @@ const mailsSlice = createSlice({
 
       state.fetchStates[inbox] = FETCH_STATES.COMPLETED;
     },
+    setCurrentInbox(state, action) {
+      state.currentInbox = action.payload;
+    },
     cleanMails(state) {
       state.mails = {};
     },
   },
 });
 
-export const { initMails, cleanMails, setAllMails } = mailsSlice.actions;
+export const {
+  initMails,
+  cleanMails,
+  setAllMails,
+  setCurrentInbox,
+} = mailsSlice.actions;
 export default mailsSlice.reducer;
 
 export const initializeInboxes = (login, password) => async (dispatch) => {

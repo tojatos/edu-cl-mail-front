@@ -1,20 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Mailbox from "../Mailbox";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  FETCH_STATES,
-  getMailsAll,
-  initializeInboxes,
-} from "../../redux/mails/mailsSlice";
-import { Backdrop, CircularProgress } from "@material-ui/core";
+import { useSelector } from "react-redux";
 
 function LoggedInView() {
-  const inbox = "odbiorcza";
-  return (
-    <>
-      <Mailbox inbox={inbox} />
-    </>
-  );
+  const inbox = useSelector((state) => state.mailData.currentInbox);
+  return <Mailbox inbox={inbox} />;
 }
 
 export default LoggedInView;
