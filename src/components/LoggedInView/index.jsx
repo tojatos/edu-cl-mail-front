@@ -1,21 +1,24 @@
 import React, { useEffect } from "react";
 import Mailbox from "../Mailbox";
 import { useDispatch, useSelector } from "react-redux";
-import { getApiMails } from "../../redux/mails/mailsSlice";
+import { FETCH_STATES, getApiMails } from "../../redux/mails/mailsSlice";
 
 function LoggedInView() {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
-  const mails = useSelector((state) => state.mailData.mails);
+  const mailData = useSelector((state) => state.mailData);
   // const [mails, setMails] = useState([]);
   const inbox = "odbiorcza";
   useEffect(() => {
-    dispatch(getApiMails(userData.user.login, userData.user.password, inbox));
+    if (mailData.fetchState === FETCH_STATES.STARTING) {
+      dispatch(getApiMails(userData.user.login, userData.user.password, inbox));
+    }
+    // TODO: other states
   }, [dispatch, userData.user.login, userData.user.password]);
 
   return (
     <div>
-      <Mailbox mails={mails[inbox]} />
+      <Mailbox mails={mailData.mails[inbox]} />
     </div>
   );
 }

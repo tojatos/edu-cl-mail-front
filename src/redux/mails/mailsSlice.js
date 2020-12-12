@@ -3,17 +3,28 @@ import { createSlice } from "@reduxjs/toolkit";
 import { enqueueSnackbarError } from "../actions/notificationActions";
 import { GET_INBOX_AMOUNT_URL } from "../../shared";
 
+export const FETCH_STATES = {
+  STARTING: "STARTING",
+  INITIALIZED: "INITIALIZED",
+  COMPLETED: "COMPLETED",
+  AWAITING: "AWAITING",
+};
+
 const mailsSlice = createSlice({
   name: "mails",
   initialState: {
+    fetchState: FETCH_STATES.STARTING,
     mails: {},
   },
   reducers: {
     addMails(state, action) {
       const { inbox, mails } = action.payload;
-      if (!state.mails[inbox]) state.mails[inbox] = [];
-      state.mails[inbox] = state.mails[inbox].concat(mails);
-      state.mails[inbox].forEach((e, i) => (e.id = i));
+      if (state.fetchState === FETCH_STATES.STARTING) {
+        if (!state.mails[inbox]) state.mails[inbox] = [];
+        state.mails[inbox] = state.mails[inbox].concat(mails);
+        state.mails[inbox].forEach((e, i) => (e.id = i));
+        state.fetchState = FETCH_STATES.INITIALIZED;
+      }
       //TODO: get this^ from API
     },
     cleanMails(state) {
