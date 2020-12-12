@@ -9,30 +9,18 @@ const apiUrl =
   process.env.REACT_APP_API_URL || "https://krzysztofruczkowski.pl:2020/api";
 const loginCheckUrl = `${apiUrl}/login_check`;
 
-let user = {};
-let loggedIn = false;
-try {
-  const userStr = localStorage.getItem("user");
-  if (userStr !== null) {
-    user = JSON.parse(userStr);
-    loggedIn = true;
-  }
-} catch {}
-
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    loggedIn: loggedIn,
-    user: user,
+    loggedIn: false,
+    user: {},
   },
   reducers: {
     loginUser(state, action) {
-      localStorage.setItem("user", JSON.stringify({ ...action.payload }));
       state.loggedIn = true;
       state.user = { ...action.payload };
     },
     logoutUser(state) {
-      localStorage.clear();
       state.loggedIn = false;
       state.user = {};
     },
