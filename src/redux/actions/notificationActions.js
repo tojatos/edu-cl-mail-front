@@ -28,7 +28,7 @@ export const enqueueSnackbarError = (message) => enqueueSnackbarSimple(message, 
 export const enqueueSnackbarInfo = (message) => enqueueSnackbarSimple(message, 'info');
 
 
-    export const closeSnackbar = key => ({
+export const closeSnackbar = key => ({
     type: CLOSE_SNACKBAR,
     dismissAll: !key, // dismiss all if no key has been defined
     key,
