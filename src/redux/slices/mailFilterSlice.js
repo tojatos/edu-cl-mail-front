@@ -4,8 +4,8 @@ const mailFilterSlice = createSlice({
   name: "mail_filter",
   initialState: {
     searchText: "",
-    selectedSenderOptions: undefined,
-    selectedPriorityOptions: undefined,
+    selectedSenderOptions: [],
+    selectedPriorityOptions: [],
     startDate: null,
     endDate: null,
     focusedDate: null,

@@ -1709,7 +1709,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@material-ui/core@^4.11.2":
+"@material-ui/core@^4.11.0", "@material-ui/core@^4.11.2":
   version "4.11.2"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.11.2.tgz#f8276dfa40d88304e6ceb98962af73803d27d42d"
   integrity sha512-/D1+AQQeYX/WhT/FUk78UCRj8ch/RCglsQLYujYTIqPSJlwZHKcvHidNeVhODXeApojeXjkl0tWdk5C9ofwOkQ==
@@ -10504,6 +10504,15 @@ react-scripts@4.0.0:
     workbox-webpack-plugin "5.1.4"
   optionalDependencies:
     fsevents "^2.1.3"
+
+react-select-material-ui@^6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/react-select-material-ui/-/react-select-material-ui-6.7.0.tgz#514e9f2df47c71754eae98c5b4e54efb69e0a071"
+  integrity sha512-j+1OxaroWacl9erxWiOrjO98AFEMgMWSVtogSfB00lvkvTMRz16e8ixqFQSi4PL83DQIh5nl7qE6yf3HxmmqCg==
+  dependencies:
+    "@material-ui/core" "^4.11.0"
+    lodash "^4.17.19"
+    react-select "^3.1.0"
 
 react-select@^3.1.0:
   version "3.1.0"

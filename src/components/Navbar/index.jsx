@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar() {
   const userData = useSelector((state) => state.userData);
-  const currentInbox = useSelector((state) => state.mailData.currentInbox);
+  const mailData = useSelector((state) => state.mailData);
   const mailFilterData = useSelector((state) => state.mailFilterData);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -200,7 +200,7 @@ function Navbar() {
               button
               onClick={i.action}
               key={i.id}
-              selected={currentInbox === i.id}
+              selected={mailData.currentInbox === i.id}
             >
               <ListItemIcon>{i.icon}</ListItemIcon>
               <ListItemText primary={INBOX_ID_TO_NAME[i.id]} />
