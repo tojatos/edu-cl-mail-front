@@ -1,12 +1,21 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { Box, Button, Grid, Paper, TextField } from "@material-ui/core";
-import { checkLogin } from "../../redux/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Backdrop,
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  Paper,
+  TextField,
+} from "@material-ui/core";
+import { checkLogin, LOGIN_REQUEST_STATES } from "../../redux/slices/userSlice";
 
 function LoginForm() {
   const { register, handleSubmit, errors } = useForm();
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userData);
 
   const onSubmit = ({ login, password }) => {
     dispatch(checkLogin(login, password));
@@ -14,7 +23,14 @@ function LoginForm() {
 
   return (
     <Grid container justify="center">
-      <Paper>
+      <Paper style={{ position: "relative", zIndex: 0 }}>
+        <Backdrop
+          open={userData?.loginRequestState === LOGIN_REQUEST_STATES.AWAITING}
+          style={{ position: "absolute", zIndex: 1 }}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+
         <Box p={4}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
