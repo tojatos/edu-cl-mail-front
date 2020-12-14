@@ -21,7 +21,7 @@ import {
   FETCH_STATES,
   getMailsAll,
   initializeInboxes,
-} from "../../redux/mails/mailsSlice";
+} from "../../redux/slices/mailsSlice";
 import { INBOX_ID_TO_NAME, INBOX_NAMES } from "../../shared";
 function Mailbox({ inbox }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);

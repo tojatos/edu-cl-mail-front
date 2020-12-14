@@ -1,7 +1,7 @@
 import notificationReducer from "./notificationReducer";
 import { combineReducers } from "redux";
-import userReducer, { logoutUser } from "../user/userSlice";
-import mailsReducer from "../mails/mailsSlice";
+import userReducer, { logoutUser } from "../slices/userSlice";
+import mailsReducer from "../slices/mailsSlice";
 
 const appReducer = combineReducers({
   userData: userReducer,

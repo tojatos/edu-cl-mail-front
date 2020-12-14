@@ -28,8 +28,8 @@ import MailIcon from "@material-ui/icons/Mail";
 import DraftsIcon from "@material-ui/icons/Drafts";
 import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import TrashIcon from "@material-ui/icons/Delete";
-import { logoutUser } from "../../redux/user/userSlice";
-import { setCurrentInbox } from "../../redux/mails/mailsSlice";
+import { logoutUser } from "../../redux/slices/userSlice";
+import { setCurrentInbox } from "../../redux/slices/mailsSlice";
 import { INBOX_ID_TO_NAME, INBOXES } from "../../shared";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({

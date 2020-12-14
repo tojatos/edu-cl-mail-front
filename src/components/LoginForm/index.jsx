@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Box, Button, Grid, Paper, TextField } from "@material-ui/core";
-import { checkLogin } from "../../redux/user/userSlice";
+import { checkLogin } from "../../redux/slices/userSlice";
 
 function LoginForm() {
   const { register, handleSubmit, errors } = useForm();
