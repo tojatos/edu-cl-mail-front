@@ -1,3 +1,5 @@
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import MomentUtils from "@date-io/moment";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -56,11 +58,13 @@ ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <ThemeProvider theme={theme}>
-        <SnackbarProvider maxSnack={3}>
-          <CssBaseline />
-          <App />
-          <Notifier />
-        </SnackbarProvider>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <SnackbarProvider maxSnack={3}>
+            <CssBaseline />
+            <App />
+            <Notifier />
+          </SnackbarProvider>
+        </MuiPickersUtilsProvider>
       </ThemeProvider>
     </PersistGate>
   </Provider>,

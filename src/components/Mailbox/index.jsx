@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import EmailList from "../EmailList";
-import "react-dates/initialize";
-import "react-dates/lib/css/_datepicker.css";
 import {
   Backdrop,
   Box,
@@ -23,6 +21,8 @@ import {
   initializeInboxes,
 } from "../../redux/slices/mailsSlice";
 import { INBOX_ID_TO_NAME } from "../../shared";
+import moment from "moment";
+
 function Mailbox({ inbox }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [openDialog, setOpenDialog] = useState(false);
@@ -63,11 +63,8 @@ function Mailbox({ inbox }) {
     </div>
   );
 
-  // const [searchText, setSearchText] = useState("");
   // const [selectedSenderOptions, setSelectedSenderOptions] = useState(undefined);
   // const [selectedPriorityOptions, setSelectedPriorityOptions] = useState(undefined);
-  // const [startDate, setStartDate] = useState(null)
-  // const [endDate, setEndDate] = useState(null)
   // const [focusedDate, setFocusedDate] = useState(null)
 
   // const onEmailListItemClick = clickedId => setSelectedMailId(selectedMailId === clickedId ? undefined : clickedId)
@@ -94,10 +91,6 @@ function Mailbox({ inbox }) {
   // const minDate = moment.min(moments);
   // const maxDate = moment.max(moments);
   //
-  // const selectedMail = selectedMailId !== undefined ?
-  //   mails.filter(e => e.id === selectedMailId).map(e => <Email {...e} />)[0] :
-  //   <NoneSelected text="mail" />;
-  //
   // if (selectedSenderOptions && selectedSenderOptions.length > 0) {
   //   mails = mails.filter(m => selectedSenderOptions.includes(m.sender));
   // }
@@ -106,15 +99,21 @@ function Mailbox({ inbox }) {
   //   mails = mails.filter(m => selectedPriorityOptions.includes(m.priority));
   // }
   //
-  // if (startDate) {
-  //   mails = mails.filter(m => moment(m.date, 'YYYY-MM-DD').isSameOrAfter(startDate, 'day'));
-  // }
-  //
-  // if (endDate) {
-  //   mails = mails.filter(m => moment(m.date, 'YYYY-MM-DD').isSameOrBefore(endDate, 'day'));
-  // }
-  //
-  //
+
+  const startDate = mailFilterData?.startDate;
+  if (startDate) {
+    mails = mails.filter((m) =>
+      moment(m.date, "YYYY-MM-DD").isSameOrAfter(startDate, "day")
+    );
+  }
+
+  const endDate = mailFilterData?.endDate;
+  if (endDate) {
+    mails = mails.filter((m) =>
+      moment(m.date, "YYYY-MM-DD").isSameOrBefore(endDate, "day")
+    );
+  }
+
   const filterText = mailFilterData?.searchText?.toLowerCase() || "";
   if (filterText.length > 0) {
     mails = mails.filter(
@@ -154,22 +153,6 @@ function Mailbox({ inbox }) {
             onChange={v => setSelectedPriorityOptions(v?.map(i => i.value))}
             options={priorityOptions}
             isMulti
-          />
-        </div>
-        <div className="filter-group">
-          <div className="filter-label">Filtruj po dacie</div>
-          <DateRangePicker
-            startDate={startDate}
-            startDateId="start_date_id"
-            endDate={endDate}
-            endDateId="end_date_id"
-            onDatesChange={({ startDate, endDate }) => {
-              setStartDate(startDate);
-              setEndDate(endDate);
-            }}
-            focusedInput={focusedDate}
-            onFocusChange={setFocusedDate}
-            isOutsideRange={day => day.isAfter(maxDate, 'day') || day.isBefore(minDate, 'day')}
           />
         </div>
         <div className="filter-group">

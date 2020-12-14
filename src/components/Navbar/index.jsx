@@ -30,7 +30,12 @@ import TrashIcon from "@material-ui/icons/Delete";
 import { logoutUser } from "../../redux/slices/userSlice";
 import { setCurrentInbox } from "../../redux/slices/mailsSlice";
 import { INBOX_ID_TO_NAME, INBOXES } from "../../shared";
-import { setSearchText } from "../../redux/slices/mailFilterSlice";
+import {
+  setEndDate,
+  setSearchText,
+  setStartDate,
+} from "../../redux/slices/mailFilterSlice";
+import { DatePicker } from "@material-ui/pickers";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -206,9 +211,29 @@ function Navbar() {
         <List>
           <ListItem>
             <TextField
-              label="Szukaj"
+              label="Szukaj w tytule / treści"
               onChange={(event) => dispatch(setSearchText(event.target.value))}
               value={mailFilterData.searchText}
+            />
+          </ListItem>
+          <ListItem>
+            <DatePicker
+              clearable
+              label="Wyświetl od"
+              value={mailFilterData.startDate}
+              onChange={(newValue) =>
+                dispatch(setStartDate(newValue?.valueOf() || null))
+              }
+            />
+          </ListItem>
+          <ListItem>
+            <DatePicker
+              clearable
+              label="Wyświetl do"
+              value={mailFilterData.endDate}
+              onChange={(newValue) =>
+                dispatch(setEndDate(newValue?.valueOf() || null))
+              }
             />
           </ListItem>
         </List>
