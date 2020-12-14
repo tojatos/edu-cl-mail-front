@@ -16,7 +16,6 @@ import {
   ListItemText,
   TextField,
   Toolbar,
-  Typography,
   useTheme,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -31,6 +30,7 @@ import TrashIcon from "@material-ui/icons/Delete";
 import { logoutUser } from "../../redux/slices/userSlice";
 import { setCurrentInbox } from "../../redux/slices/mailsSlice";
 import { INBOX_ID_TO_NAME, INBOXES } from "../../shared";
+import { setSearchText } from "../../redux/slices/mailFilterSlice";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,6 +98,7 @@ const useStyles = makeStyles((theme) => ({
 function Navbar() {
   const userData = useSelector((state) => state.userData);
   const currentInbox = useSelector((state) => state.mailData.currentInbox);
+  const mailFilterData = useSelector((state) => state.mailFilterData);
   const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
@@ -204,7 +205,11 @@ function Navbar() {
         <Divider />
         <List>
           <ListItem>
-            <TextField label="Szukaj" />
+            <TextField
+              label="Szukaj"
+              onChange={(event) => dispatch(setSearchText(event.target.value))}
+              value={mailFilterData.searchText}
+            />
           </ListItem>
         </List>
       </Drawer>

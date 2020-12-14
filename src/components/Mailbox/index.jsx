@@ -22,13 +22,14 @@ import {
   getMailsAll,
   initializeInboxes,
 } from "../../redux/slices/mailsSlice";
-import { INBOX_ID_TO_NAME, INBOX_NAMES } from "../../shared";
+import { INBOX_ID_TO_NAME } from "../../shared";
 function Mailbox({ inbox }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [openDialog, setOpenDialog] = useState(false);
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
   const mailData = useSelector((state) => state.mailData);
+  const mailFilterData = useSelector((state) => state.mailFilterData);
   // const [mails, setMails] = useState([]);
   useEffect(() => {
     if (
@@ -48,7 +49,7 @@ function Mailbox({ inbox }) {
     userData.user.login,
     userData.user.password,
   ]);
-  const mails = mailData.mails[inbox] || [];
+  let mails = mailData.mails[inbox] || [];
 
   const selectedMail = (
     <div>
@@ -114,9 +115,14 @@ function Mailbox({ inbox }) {
   // }
   //
   //
-  // if (searchText.length > 0) {
-  //   mails = mails.filter(m => m.title.toLowerCase().includes(searchText) || m.message.toLowerCase().includes(searchText))
-  // }
+  const filterText = mailFilterData?.searchText?.toLowerCase() || "";
+  if (filterText.length > 0) {
+    mails = mails.filter(
+      (m) =>
+        m.title.toLowerCase().includes(filterText) ||
+        m.message.toLowerCase().includes(filterText)
+    );
+  }
 
   return (
     <div>
