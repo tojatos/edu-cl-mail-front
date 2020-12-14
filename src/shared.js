@@ -15,9 +15,10 @@ export const INBOXES = {
   ROBOCZA: "robocza",
   USUNIETE: "usuniete",
 };
-export const INBOX_NAMES = {
-  ODBIORCZA: "Odbiorcza",
-  NADAWCZA: "Nadawcza",
-  ROBOCZA: "Robocza",
-  USUNIETE: "Usuniete",
+
+export const INBOX_ID_TO_NAME = {
+  odbiorcza: "Odbiorcza",
+  nadawcza: "Nadawcza",
+  robocza: "Robocza",
+  usuniete: "Usunięte",
 };

@@ -4,11 +4,15 @@ import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 import {
   Backdrop,
+  Box,
   Button,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
+  Grid,
+  Typography,
 } from "@material-ui/core";
 import NoneSelected from "../NoneSelected";
 import Email from "../Email";
@@ -18,6 +22,7 @@ import {
   getMailsAll,
   initializeInboxes,
 } from "../../redux/mails/mailsSlice";
+import { INBOX_ID_TO_NAME, INBOX_NAMES } from "../../shared";
 function Mailbox({ inbox }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [openDialog, setOpenDialog] = useState(false);
@@ -36,18 +41,14 @@ function Mailbox({ inbox }) {
     if (mailData.fetchStates[inbox] === FETCH_STATES.INITIALIZED) {
       dispatch(getMailsAll(userData.user.login, userData.user.password, inbox));
     }
-
-    // TODO: other states
   }, [
     dispatch,
+    inbox,
     mailData.fetchStates,
     userData.user.login,
     userData.user.password,
   ]);
   const mails = mailData.mails[inbox] || [];
-
-  // const getMailById = mailId => mails.filter(e => e.id === selectedMailId)[0];
-  // console.log(getMailById(selectedMailId))
 
   const selectedMail = (
     <div>
@@ -118,13 +119,16 @@ function Mailbox({ inbox }) {
   // }
 
   return (
-    <div className="mailbox">
+    <div>
       <Backdrop
         open={
           !mailData.fetchStates[inbox] ||
           mailData.fetchStates[inbox] === FETCH_STATES.STARTING
         }
       >
+        <Box m={2}>
+          <Typography>Ładowanie maili</Typography>
+        </Box>
         <CircularProgress color="inherit" />
       </Backdrop>
       {/* <div className="filters">
@@ -167,7 +171,13 @@ function Mailbox({ inbox }) {
           <input type="text" placeholder="Szukaj w treści" onChange={onSearchChange} size="1" />
         </div>
       </div> */}
-      <div className="inbox-container">
+      <Box m={3}>
+        <Grid container direction="row" justify="space-between">
+          <Typography>{INBOX_ID_TO_NAME[inbox]}</Typography>
+          {mailData.fetchStates[inbox] && (
+            <Chip color="secondary" label={mailData.fetchStates[inbox]} />
+          )}
+        </Grid>
         <EmailList
           mails={mails}
           onClick={onEmailListItemClick}
@@ -187,7 +197,7 @@ function Mailbox({ inbox }) {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </Box>
     </div>
   );
 }

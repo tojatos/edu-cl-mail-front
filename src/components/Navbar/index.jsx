@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import {
   AppBar,
+  Box,
   Button,
+  Chip,
   Divider,
   Drawer,
   IconButton,
@@ -28,7 +30,7 @@ import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import TrashIcon from "@material-ui/icons/Delete";
 import { logoutUser } from "../../redux/user/userSlice";
 import { setCurrentInbox } from "../../redux/mails/mailsSlice";
-import { INBOX_NAMES, INBOXES } from "../../shared";
+import { INBOX_ID_TO_NAME, INBOXES } from "../../shared";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -110,25 +112,21 @@ function Navbar() {
 
   const inboxes = [
     {
-      name: INBOX_NAMES.ODBIORCZA,
       id: INBOXES.ODBIORCZA,
       icon: <MailIcon />,
       action: () => dispatch(setCurrentInbox(INBOXES.ODBIORCZA)),
     },
     {
-      name: INBOX_NAMES.NADAWCZA,
       id: INBOXES.NADAWCZA,
       icon: <UnarchiveIcon />,
       action: () => dispatch(setCurrentInbox(INBOXES.NADAWCZA)),
     },
     {
-      name: INBOX_NAMES.ROBOCZA,
       id: INBOXES.ROBOCZA,
       icon: <DraftsIcon />,
       action: () => dispatch(setCurrentInbox(INBOXES.ROBOCZA)),
     },
     {
-      name: INBOX_NAMES.USUNIETE,
       id: INBOXES.USUNIETE,
       icon: <TrashIcon />,
       action: () => dispatch(setCurrentInbox(INBOXES.USUNIETE)),
@@ -155,9 +153,11 @@ function Navbar() {
               <MenuIcon />
             </IconButton>
           ) : null}
-          <Typography variant="h6" className={classes.title}>
-            {userData.user.login}
-          </Typography>
+          <Box className={classes.title}>
+            {userData.user.login && (
+              <Chip color="secondary" label={userData.user.login} />
+            )}
+          </Box>
           {userData.loggedIn ? (
             <Button color="inherit" onClick={() => dispatch(logoutUser())}>
               Logout
@@ -193,11 +193,11 @@ function Navbar() {
             <ListItem
               button
               onClick={i.action}
-              key={i.name}
+              key={i.id}
               selected={currentInbox === i.id}
             >
               <ListItemIcon>{i.icon}</ListItemIcon>
-              <ListItemText primary={i.name} />
+              <ListItemText primary={INBOX_ID_TO_NAME[i.id]} />
             </ListItem>
           ))}
         </List>
