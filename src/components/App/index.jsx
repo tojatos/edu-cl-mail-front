@@ -38,7 +38,7 @@ function MainView({ children }) {
   return (
     <>
       <Navbar />
-      <Container>{children}</Container>
+      <Container disableGutters>{children}</Container>
     </>
   );
 }

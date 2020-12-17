@@ -6,10 +6,8 @@ import {
   Button,
   Chip,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
   Grid,
+  IconButton,
   Paper,
   Typography,
   useTheme,
@@ -25,6 +23,7 @@ import {
 import { INBOX_ID_TO_NAME, INBOXES } from "../../shared";
 import moment from "moment";
 import { setSelectedSenderOptions } from "../../redux/slices/mailFilterSlice";
+import { ArrowBack } from "@material-ui/icons";
 
 const getSelectTheme = (theme) => {
   return {
@@ -167,7 +166,7 @@ function filterMails(inbox, mails, mailFilterData) {
 
 function Mailbox({ inbox }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
-  const [openDialog, setOpenDialog] = useState(false);
+  const [mailSelected, setMailSelected] = useState(false);
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
   const mailData = useSelector((state) => state.mailData);
@@ -201,7 +200,7 @@ function Mailbox({ inbox }) {
 
   const onEmailListItemClick = (clickedId) => {
     setSelectedMailId(clickedId);
-    setOpenDialog(true);
+    setMailSelected(true);
   };
 
   function SenderFilter() {
@@ -245,34 +244,32 @@ function Mailbox({ inbox }) {
         </Box>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Box m={3}>
-        <Grid container direction="row" justify="space-between">
-          <Typography>{INBOX_ID_TO_NAME[inbox]}</Typography>
-          {mailData.fetchStates[inbox] && (
-            <Chip color="secondary" label={mailData.fetchStates[inbox]} />
-          )}
-        </Grid>
-        <SenderFilter />
-        <EmailList
-          mails={mails}
-          onClick={onEmailListItemClick}
-          selectedMailId={selectedMailId}
-        />
-        <Dialog
-          fullWidth
-          maxWidth="lg"
-          scroll="paper"
-          open={openDialog}
-          onClose={() => setOpenDialog(false)}
-        >
-          <DialogContent>{selectedMail}</DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenDialog(false)} color="primary">
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Box>
+      <Box m={3} />
+      {!mailSelected ? (
+        <>
+          <Box m={1}>
+            <Grid container direction="row" justify="space-between">
+              <Typography>{INBOX_ID_TO_NAME[inbox]}</Typography>
+              {mailData.fetchStates[inbox] && (
+                <Chip color="secondary" label={mailData.fetchStates[inbox]} />
+              )}
+            </Grid>
+          </Box>
+          <SenderFilter />
+          <EmailList
+            mails={mails}
+            onClick={onEmailListItemClick}
+            selectedMailId={selectedMailId}
+          />
+        </>
+      ) : (
+        <>
+          <IconButton edge="start" onClick={() => setMailSelected(false)}>
+            <ArrowBack />
+          </IconButton>
+          <Paper elevation={0}>{selectedMail}</Paper>
+        </>
+      )}
     </div>
   );
 }
