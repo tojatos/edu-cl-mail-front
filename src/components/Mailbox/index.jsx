@@ -15,7 +15,6 @@ import {
   useTheme,
 } from "@material-ui/core";
 import { MultipleSelect } from "react-select-material-ui";
-import NoneSelected from "../NoneSelected";
 import Email from "../Email";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -129,59 +128,8 @@ const getSelectTheme = (theme) => {
   };
 };
 
-function Mailbox({ inbox }) {
-  const [selectedMailId, setSelectedMailId] = useState(undefined);
-  const [openDialog, setOpenDialog] = useState(false);
-  const dispatch = useDispatch();
-  const userData = useSelector((state) => state.userData);
-  const mailData = useSelector((state) => state.mailData);
-  const mailFilterData = useSelector((state) => state.mailFilterData);
-  const theme = useTheme();
-  const formThemeColors = getSelectTheme(theme);
-  const notInitialized =
-    !mailData.fetchStates[inbox] ||
-    mailData.fetchStates[inbox] === FETCH_STATES.STARTING;
-
-  useEffect(() => {
-    if (notInitialized) {
-      dispatch(initializeInboxes(userData.user.login, userData.user.password));
-    }
-    if (mailData.fetchStates[inbox] === FETCH_STATES.INITIALIZED) {
-      dispatch(getMailsAll(userData.user.login, userData.user.password, inbox));
-    }
-  }, [
-    dispatch,
-    inbox,
-    mailData.fetchStates,
-    notInitialized,
-    userData.user.login,
-    userData.user.password,
-  ]);
-  let mails = mailData.mails[inbox] || [];
-
-  const selectedMail = (
-    <div>
-      {selectedMailId !== undefined ? (
-        mails
-          .filter((e) => e.id === selectedMailId)
-          .map((e) => <Email {...e} />)[0]
-      ) : (
-        <NoneSelected text="mail" />
-      )}
-    </div>
-  );
-  const onEmailListItemClick = (clickedId) => {
-    setSelectedMailId(clickedId);
-    setOpenDialog(true);
-  };
-  let senderOptions;
+function filterMails(inbox, mails, mailFilterData) {
   if (inbox === INBOXES.ODBIORCZA) {
-    senderOptions = mailData.mails[mailData.currentInbox]
-      ? mailData.mails[mailData.currentInbox]
-          .map((mail) => mail.sender)
-          .filter((x, i, a) => a.indexOf(x) === i) //unique
-      : [];
-
     if (
       mailFilterData.selectedSenderOptions &&
       mailFilterData.selectedSenderOptions.length > 0
@@ -214,6 +162,80 @@ function Mailbox({ inbox }) {
         m.message.toLowerCase().includes(filterText)
     );
   }
+  return mails;
+}
+
+function Mailbox({ inbox }) {
+  const [selectedMailId, setSelectedMailId] = useState(undefined);
+  const [openDialog, setOpenDialog] = useState(false);
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userData);
+  const mailData = useSelector((state) => state.mailData);
+  const mailFilterData = useSelector((state) => state.mailFilterData);
+  const theme = useTheme();
+  const formThemeColors = getSelectTheme(theme);
+  const notInitialized =
+    !mailData.fetchStates[inbox] ||
+    mailData.fetchStates[inbox] === FETCH_STATES.STARTING;
+
+  useEffect(() => {
+    if (notInitialized) {
+      dispatch(initializeInboxes(userData.user.login, userData.user.password));
+    }
+    if (mailData.fetchStates[inbox] === FETCH_STATES.INITIALIZED) {
+      dispatch(getMailsAll(userData.user.login, userData.user.password, inbox));
+    }
+  }, [
+    dispatch,
+    inbox,
+    mailData.fetchStates,
+    notInitialized,
+    userData.user.login,
+    userData.user.password,
+  ]);
+  let mails = mailData.mails[inbox] || [];
+
+  const selectedMail = mails
+    .filter((e) => e.id === selectedMailId)
+    .map((e) => <Email {...e} />)[0];
+
+  const onEmailListItemClick = (clickedId) => {
+    setSelectedMailId(clickedId);
+    setOpenDialog(true);
+  };
+
+  function SenderFilter() {
+    if (inbox !== INBOXES.ODBIORCZA || notInitialized) return null;
+
+    const senderOptions = mailData.mails[mailData.currentInbox]
+      ? mailData.mails[mailData.currentInbox]
+          .map((mail) => mail.sender)
+          .filter((x, i, a) => a.indexOf(x) === i) //unique
+      : [];
+    return (
+      <Paper>
+        <Box m={1}>
+          <MultipleSelect
+            placeholder="Filtruj po nadawcy..."
+            fullWidth
+            defaultValues={mailFilterData.selectedSenderOptions}
+            onChange={(it) => dispatch(setSelectedSenderOptions(it))}
+            options={senderOptions}
+            SelectProps={{
+              theme: (theme) => ({
+                ...theme,
+                colors: {
+                  ...formThemeColors,
+                },
+              }),
+            }}
+          />
+        </Box>
+      </Paper>
+    );
+  }
+
+  mails = filterMails(inbox, mails, mailFilterData);
 
   return (
     <div>
@@ -230,27 +252,7 @@ function Mailbox({ inbox }) {
             <Chip color="secondary" label={mailData.fetchStates[inbox]} />
           )}
         </Grid>
-        {inbox === INBOXES.ODBIORCZA && !notInitialized && (
-          <Paper>
-            <Box m={1}>
-              <MultipleSelect
-                placeholder="Filtruj po nadawcy..."
-                fullWidth
-                defaultValues={mailFilterData.selectedSenderOptions}
-                onChange={(it) => dispatch(setSelectedSenderOptions(it))}
-                options={senderOptions}
-                SelectProps={{
-                  theme: (theme) => ({
-                    ...theme,
-                    colors: {
-                      ...formThemeColors,
-                    },
-                  }),
-                }}
-              />
-            </Box>
-          </Paper>
-        )}
+        <SenderFilter />
         <EmailList
           mails={mails}
           onClick={onEmailListItemClick}

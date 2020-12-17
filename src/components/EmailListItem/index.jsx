@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import "moment/locale/pl";
-import { ListItem, ListItemText, makeStyles } from "@material-ui/core";
+import { ListItem, ListItemText } from "@material-ui/core";
 
 moment.locale("pl");
 
