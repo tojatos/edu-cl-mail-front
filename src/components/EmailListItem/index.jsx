@@ -32,7 +32,7 @@ function EmailListItem({
       <ListItemText
         primary={title}
         primaryTypographyProps={nowrapStyle}
-        secondary={sender || receiver + " - " + displayedDate}
+        secondary={[receiver || sender, displayedDate].join("  -  ")}
         secondaryTypographyProps={nowrapStyle}
       />
     </ListItem>

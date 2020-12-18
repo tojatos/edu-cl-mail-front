@@ -40,7 +40,7 @@ function Email({ title, sender, receiver, date, message }) {
     <>
       <Box p={1}>
         <Typography variant="h6">{title}</Typography>
-        <Typography variant="subtitle1">{sender || receiver}</Typography>
+        <Typography variant="subtitle1">{receiver || sender}</Typography>
         <Typography variant="subtitle2">{displayedDate}</Typography>
       </Box>
       <Divider />
