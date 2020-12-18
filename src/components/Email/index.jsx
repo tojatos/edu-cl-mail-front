@@ -3,11 +3,14 @@ import { Box, Divider, Typography } from "@material-ui/core";
 import moment from "moment";
 
 function linkify(inputText) {
-  var replacedText, replacePattern1, replacePattern2, replacePattern3;
+  let replacedText, replacePattern1, replacePattern2, replacePattern3;
+
+  // remove existing links
+  replacedText = inputText.replace(/<\/?a[^>]*>/gi, "");
 
   //URLs starting with http://, https://, or ftp://
   replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
-  replacedText = inputText.replace(
+  replacedText = replacedText.replace(
     replacePattern1,
     '<a href="$1" target="_blank">$1</a>'
   );
