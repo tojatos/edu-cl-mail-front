@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Mailbox from "../Mailbox";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  FETCH_STATES,
+  getMailsAll,
+  initializeInboxes,
+} from "../../redux/slices/mailsSlice";
 
 function LoggedInView() {
-  const inbox = useSelector((state) => state.mailData.currentInbox);
+  const dispatch = useDispatch();
+  const mailData = useSelector((state) => state.mailData);
+  const userData = useSelector((state) => state.userData);
+  const inbox = mailData.currentInbox;
+
+  const notInitialized =
+    !mailData.fetchStates[inbox] ||
+    mailData.fetchStates[inbox] === FETCH_STATES.STARTING;
+
+  useEffect(() => {
+    if (notInitialized) {
+      dispatch(initializeInboxes(userData.user.login, userData.user.password));
+    }
+    if (mailData.fetchStates[inbox] === FETCH_STATES.INITIALIZED) {
+      dispatch(getMailsAll(userData.user.login, userData.user.password, inbox));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return <Mailbox inbox={inbox} key={inbox} />; // use the key to reset state of component on change in navigation
 }
 

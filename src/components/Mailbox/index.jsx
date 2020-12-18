@@ -168,7 +168,6 @@ function Mailbox({ inbox }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [mailSelected, setMailSelected] = useState(false);
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.userData);
   const mailData = useSelector((state) => state.mailData);
   const mailFilterData = useSelector((state) => state.mailFilterData);
   const theme = useTheme();
@@ -177,21 +176,6 @@ function Mailbox({ inbox }) {
     !mailData.fetchStates[inbox] ||
     mailData.fetchStates[inbox] === FETCH_STATES.STARTING;
 
-  useEffect(() => {
-    if (notInitialized) {
-      dispatch(initializeInboxes(userData.user.login, userData.user.password));
-    }
-    if (mailData.fetchStates[inbox] === FETCH_STATES.INITIALIZED) {
-      dispatch(getMailsAll(userData.user.login, userData.user.password, inbox));
-    }
-  }, [
-    dispatch,
-    inbox,
-    mailData.fetchStates,
-    notInitialized,
-    userData.user.login,
-    userData.user.password,
-  ]);
   let mails = mailData.mails[inbox] || [];
 
   const selectedMail = mails
