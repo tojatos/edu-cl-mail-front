@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Divider, Typography } from "@material-ui/core";
+import { Box, Divider, Link, Typography } from "@material-ui/core";
 import moment from "moment";
+import JsxParser from "react-jsx-parser";
 
 function linkify(inputText) {
   let replacedText, replacePattern1, replacePattern2, replacePattern3;
@@ -12,21 +13,21 @@ function linkify(inputText) {
   replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
   replacedText = replacedText.replace(
     replacePattern1,
-    '<a href="$1" target="_blank">$1</a>'
+    '<Link href="$1" target="_blank" rel="noreferrer">$1</Link>'
   );
 
   //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
   replacePattern2 = /(^|[^/])(www\.[\S]+(\b|$))/gim;
   replacedText = replacedText.replace(
     replacePattern2,
-    '$1<a href="http://$2" target="_blank">$2</a>'
+    '$1<Link href="http://$2" target="_blank" rel="noreferrer">$2</Link>'
   );
 
   //Change email addresses to mailto:: links.
   replacePattern3 = /(([a-zA-Z0-9\-_.])+@[a-zA-Z_]+?(\.[a-zA-Z]{2,6})+)/gim;
   replacedText = replacedText.replace(
     replacePattern3,
-    '<a href="mailto:$1">$1</a>'
+    '<Link href="mailto:$1">$1</Link>'
   );
 
   return replacedText;
@@ -44,11 +45,10 @@ function Email({ title, sender, receiver, date, message }) {
       </Box>
       <Divider />
       <Box p={2} m={1}>
-        <div
-          className="body"
-          dangerouslySetInnerHTML={{
-            __html: linkify(message.replace(/(?:\r\n|\r|\n)/g, "<br>")),
-          }}
+        <JsxParser
+          autoCloseVoidElements
+          components={{ Link }}
+          jsx={linkify(message.replace(/(?:\r\n|\r|\n)/g, "<br>"))}
         />
       </Box>
     </>
