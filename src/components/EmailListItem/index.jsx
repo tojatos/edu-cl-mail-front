@@ -7,6 +7,7 @@ moment.locale("pl");
 
 function EmailListItem({
   sender,
+  receiver,
   title,
   priority,
   date,
@@ -31,7 +32,7 @@ function EmailListItem({
       <ListItemText
         primary={title}
         primaryTypographyProps={nowrapStyle}
-        secondary={sender + " - " + displayedDate}
+        secondary={sender || receiver + " - " + displayedDate}
         secondaryTypographyProps={nowrapStyle}
       />
     </ListItem>

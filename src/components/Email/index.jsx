@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Divider, Paper, Typography } from "@material-ui/core";
+import { Box, Divider, Typography } from "@material-ui/core";
 import moment from "moment";
 
 function linkify(inputText) {
@@ -40,7 +40,6 @@ function Email({ title, sender, receiver, date, message }) {
         <Typography variant="subtitle2">{displayedDate}</Typography>
       </Box>
       <Divider />
-      {/*<Paper elevation={6}>*/}
       <Box p={2} m={1}>
         <div
           className="body"
@@ -49,7 +48,6 @@ function Email({ title, sender, receiver, date, message }) {
           }}
         />
       </Box>
-      {/*</Paper>*/}
     </>
   );
 }
