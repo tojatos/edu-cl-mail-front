@@ -14,13 +14,11 @@ import {
 import { MultipleSelect } from "react-select-material-ui";
 import Email from "../Email";
 import { useDispatch, useSelector } from "react-redux";
-import { FETCH_STATES } from "../../redux/slices/mailsSlice";
+import { FETCH_STATES, reloadMailsIfNew } from "../../redux/slices/mailsSlice";
 import { INBOX_ID_TO_NAME, INBOXES } from "../../shared";
 import moment from "moment";
 import { setSelectedSenderOptions } from "../../redux/slices/mailFilterSlice";
 import { ArrowBack, Cached } from "@material-ui/icons";
-import { LOGIN_REQUEST_STATES } from "../../redux/slices/userSlice";
-
 const getSelectTheme = (theme) => {
   return {
     /*
@@ -164,6 +162,7 @@ function Mailbox({ inbox }) {
   const [selectedMailId, setSelectedMailId] = useState(undefined);
   const [mailSelected, setMailSelected] = useState(false);
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userData);
   const mailData = useSelector((state) => state.mailData);
   const mailFilterData = useSelector((state) => state.mailFilterData);
   const theme = useTheme();
@@ -234,21 +233,21 @@ function Mailbox({ inbox }) {
               justify="space-between"
               alignItems="center"
             >
-              <Grid item spacing={3} style={{ flexGrow: 50 }}>
+              <Grid item style={{ flexGrow: 50 }}>
                 <Typography>{INBOX_ID_TO_NAME[inbox]}</Typography>
               </Grid>
               {mailData.fetchStates[inbox] && (
                 <>
-                  <Grid item spacing={3} style={{ flexGrow: 1 }}>
+                  <Grid item style={{ flexGrow: 1 }}>
                     <Chip
                       color="secondary"
                       label={mailData.fetchStates[inbox]}
                     />
                   </Grid>
-                  <Grid item spacing={3} style={{ flexGrow: 1 }}>
+                  <Grid item style={{ flexGrow: 1 }}>
                     <Chip color="primary" label={mails.length} />
                   </Grid>
-                  <Grid item spacing={3}>
+                  <Grid item>
                     <div style={{ position: "relative", width: 48 }}>
                       <Backdrop
                         open={
@@ -262,7 +261,19 @@ function Mailbox({ inbox }) {
                       >
                         <CircularProgress color="inherit" />
                       </Backdrop>
-                      <IconButton edge="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() =>
+                          dispatch(
+                            reloadMailsIfNew(
+                              userData.user.login,
+                              userData.user.password,
+                              inbox,
+                              mails.length
+                            )
+                          )
+                        }
+                      >
                         <Cached />
                       </IconButton>
                     </div>

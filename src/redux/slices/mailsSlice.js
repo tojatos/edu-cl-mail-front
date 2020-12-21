@@ -3,9 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   GET_INBOX_ALL_URL,
   GET_INBOX_AMOUNT_URL,
+  GET_NUM_MAILS_URL,
   INBOXES,
   INITIAL_MAIL_AMOUNT,
 } from "../../shared";
+import {
+  enqueueSnackbarInfo,
+  enqueueSnackbarSuccess,
+} from "../actions/notificationActions";
 
 export const FETCH_STATES = {
   STARTING: "STARTING",
@@ -52,6 +57,14 @@ const mailsSlice = createSlice({
     cleanMails(state) {
       state.mails = {};
     },
+    awaitRequest(state, action) {
+      const inbox = action.payload;
+      state.fetchStates[inbox] = FETCH_STATES.AWAITING;
+    },
+    noNewMails(state, action) {
+      const inbox = action.payload;
+      state.fetchStates[inbox] = FETCH_STATES.COMPLETED;
+    },
   },
 });
 
@@ -60,6 +73,8 @@ export const {
   cleanMails,
   setAllMails,
   setCurrentInbox,
+  awaitRequest,
+  noNewMails,
 } = mailsSlice.actions;
 export default mailsSlice.reducer;
 
@@ -86,9 +101,6 @@ export const getMailsInitial = (login, password, inbox) => async (dispatch) => {
     }
   } catch (error) {
     console.warn(error);
-    // dispatch(
-    //   enqueueSnackbarError("Nie udało się pobrać maili ze skrzynki " + inbox)
-    // );
   }
 };
 export const getMailsAll = (login, password, inbox) => async (dispatch) => {
@@ -105,8 +117,29 @@ export const getMailsAll = (login, password, inbox) => async (dispatch) => {
     }
   } catch (error) {
     console.warn(error);
-    // dispatch(
-    //   enqueueSnackbarError("Nie udało się pobrać maili ze skrzynki " + inbox)
-    // );
+  }
+};
+export const reloadMailsIfNew = (
+  login,
+  password,
+  inbox,
+  currentMailCount
+) => async (dispatch) => {
+  try {
+    dispatch(awaitRequest(inbox));
+    const result = await axios.post(GET_NUM_MAILS_URL(inbox), {
+      username: login,
+      password: password,
+    });
+    const mailCount = result.data;
+    if (mailCount <= currentMailCount) {
+      dispatch(enqueueSnackbarInfo("Nie ma nowych maili"));
+      dispatch(noNewMails(inbox));
+    } else {
+      dispatch(enqueueSnackbarSuccess("Znaleziono nowe maile, pobieranie..."));
+      dispatch(getMailsAll(login, password, inbox));
+    }
+  } catch (error) {
+    console.warn(error);
   }
 };
