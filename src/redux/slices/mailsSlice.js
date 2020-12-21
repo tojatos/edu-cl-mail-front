@@ -8,6 +8,7 @@ import {
   INITIAL_MAIL_AMOUNT,
 } from "../../shared";
 import {
+  enqueueSnackbarError,
   enqueueSnackbarInfo,
   enqueueSnackbarSuccess,
 } from "../actions/notificationActions";
@@ -140,6 +141,8 @@ export const reloadMailsIfNew = (
       dispatch(getMailsAll(login, password, inbox));
     }
   } catch (error) {
+    dispatch(enqueueSnackbarError("Błąd w połączeniu z serwerem"));
+    dispatch(noNewMails(inbox));
     console.warn(error);
   }
 };

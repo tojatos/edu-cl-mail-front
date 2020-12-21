@@ -6,6 +6,7 @@ import {
   getMailsAll,
   initializeInboxes,
 } from "../../redux/slices/mailsSlice";
+import { INBOXES } from "../../shared";
 
 function LoggedInView() {
   const dispatch = useDispatch();
@@ -21,9 +22,11 @@ function LoggedInView() {
     if (notInitialized) {
       dispatch(initializeInboxes(userData.user.login, userData.user.password));
     }
-    if (mailData.fetchStates[inbox] === FETCH_STATES.INITIALIZED) {
-      dispatch(getMailsAll(userData.user.login, userData.user.password, inbox));
-    }
+    Object.values(INBOXES).forEach((i) => {
+      if (mailData.fetchStates[i] !== FETCH_STATES.COMPLETED) {
+        dispatch(getMailsAll(userData.user.login, userData.user.password, i));
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return <Mailbox inbox={inbox} key={inbox} />; // use the key to reset state of component on change in navigation
