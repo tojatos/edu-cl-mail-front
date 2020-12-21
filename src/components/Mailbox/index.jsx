@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import EmailList from "../EmailList";
 import {
   Backdrop,
   Box,
-  Button,
   Chip,
   CircularProgress,
   Grid,
@@ -15,15 +14,12 @@ import {
 import { MultipleSelect } from "react-select-material-ui";
 import Email from "../Email";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  FETCH_STATES,
-  getMailsAll,
-  initializeInboxes,
-} from "../../redux/slices/mailsSlice";
+import { FETCH_STATES } from "../../redux/slices/mailsSlice";
 import { INBOX_ID_TO_NAME, INBOXES } from "../../shared";
 import moment from "moment";
 import { setSelectedSenderOptions } from "../../redux/slices/mailFilterSlice";
-import { ArrowBack } from "@material-ui/icons";
+import { ArrowBack, Cached } from "@material-ui/icons";
+import { LOGIN_REQUEST_STATES } from "../../redux/slices/userSlice";
 
 const getSelectTheme = (theme) => {
   return {
@@ -232,10 +228,46 @@ function Mailbox({ inbox }) {
       {!mailSelected ? (
         <>
           <Box m={1}>
-            <Grid container direction="row" justify="space-between">
-              <Typography>{INBOX_ID_TO_NAME[inbox]}</Typography>
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Grid item spacing={3} style={{ flexGrow: 50 }}>
+                <Typography>{INBOX_ID_TO_NAME[inbox]}</Typography>
+              </Grid>
               {mailData.fetchStates[inbox] && (
-                <Chip color="secondary" label={mailData.fetchStates[inbox]} />
+                <>
+                  <Grid item spacing={3} style={{ flexGrow: 1 }}>
+                    <Chip
+                      color="secondary"
+                      label={mailData.fetchStates[inbox]}
+                    />
+                  </Grid>
+                  <Grid item spacing={3} style={{ flexGrow: 1 }}>
+                    <Chip color="primary" label={mails.length} />
+                  </Grid>
+                  <Grid item spacing={3}>
+                    <div style={{ position: "relative", width: 48 }}>
+                      <Backdrop
+                        open={
+                          mailData.fetchStates[inbox] !== FETCH_STATES.COMPLETED
+                        }
+                        style={{
+                          position: "absolute",
+                          zIndex: 1,
+                          borderRadius: 100,
+                        }}
+                      >
+                        <CircularProgress color="inherit" />
+                      </Backdrop>
+                      <IconButton edge="end">
+                        <Cached />
+                      </IconButton>
+                    </div>
+                  </Grid>
+                </>
               )}
             </Grid>
           </Box>
