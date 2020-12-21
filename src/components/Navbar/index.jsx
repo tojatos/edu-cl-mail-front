@@ -160,7 +160,7 @@ function Navbar() {
             </IconButton>
           ) : null}
           <Box className={classes.title}>
-            {userData.user.login && (
+            {userData.user.login && !open && (
               <Chip color="secondary" label={userData.user.login} />
             )}
           </Box>
