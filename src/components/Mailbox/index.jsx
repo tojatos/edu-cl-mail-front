@@ -269,7 +269,7 @@ function Mailbox({ inbox }) {
                               userData.user.login,
                               userData.user.password,
                               inbox,
-                              mails.length
+                              mailData.mails[inbox]?.length || 0
                             )
                           )
                         }
