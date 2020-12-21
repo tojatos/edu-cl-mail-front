@@ -13,21 +13,21 @@ function linkify(inputText) {
   replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
   replacedText = replacedText.replace(
     replacePattern1,
-    '<Link href="$1" target="_blank" rel="noreferrer">$1</Link>'
+    '<Link href="$1" target="_blank" rel="noreferrer" style="word-wrap: break-word">$1</Link>'
   );
 
   //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
   replacePattern2 = /(^|[^/])(www\.[\S]+(\b|$))/gim;
   replacedText = replacedText.replace(
     replacePattern2,
-    '$1<Link href="http://$2" target="_blank" rel="noreferrer">$2</Link>'
+    '$1<Link href="http://$2" target="_blank" rel="noreferrer" style="word-wrap: break-word">$2</Link>'
   );
 
   //Change email addresses to mailto:: links.
   replacePattern3 = /(([a-zA-Z0-9\-_.])+@[a-zA-Z_]+?(\.[a-zA-Z]{2,6})+)/gim;
   replacedText = replacedText.replace(
     replacePattern3,
-    '<Link href="mailto:$1">$1</Link>'
+    '<Link href="mailto:$1" style="word-wrap: break-word">$1</Link>'
   );
 
   return replacedText;
