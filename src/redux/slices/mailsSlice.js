@@ -66,6 +66,13 @@ const mailsSlice = createSlice({
       const inbox = action.payload;
       state.fetchStates[inbox] = FETCH_STATES.COMPLETED;
     },
+    appendMails(state, action) {
+      const { inbox, mails } = action.payload;
+      state.mails[inbox] = mails.concat(state.mails[inbox])
+      state.mails[inbox].forEach((e, i) => (e.id = i));
+      //TODO: get this^ from API
+      state.fetchStates[inbox] = FETCH_STATES.COMPLETED;
+    },
   },
 });
 
@@ -76,6 +83,7 @@ export const {
   setCurrentInbox,
   awaitRequest,
   noNewMails,
+  appendMails,
 } = mailsSlice.actions;
 export default mailsSlice.reducer;
 
@@ -120,6 +128,27 @@ export const getMailsAll = (login, password, inbox) => async (dispatch) => {
     console.warn(error);
   }
 };
+
+export const getAndAppendMails = (login, password, inbox, amount) => async (dispatch) => {
+  try {
+    const result = await axios.post(
+      GET_INBOX_AMOUNT_URL(inbox, amount),
+      {
+        username: login,
+        password: password,
+      }
+    );
+    if (Array.isArray(result.data)) {
+      let mails = result.data;
+      dispatch(appendMails({ inbox, mails }));
+    } else {
+      console.warn(result.data);
+    }
+  } catch (error) {
+    console.warn(error);
+  }
+};
+
 export const reloadMailsIfNew = (
   login,
   password,
@@ -138,7 +167,7 @@ export const reloadMailsIfNew = (
       dispatch(noNewMails(inbox));
     } else {
       dispatch(enqueueSnackbarSuccess("Znaleziono nowe maile, pobieranie..."));
-      dispatch(getMailsAll(login, password, inbox));
+      dispatch(getAndAppendMails(login, password, inbox, mailCount - currentMailCount));
     }
   } catch (error) {
     dispatch(enqueueSnackbarError("Błąd w połączeniu z serwerem"));

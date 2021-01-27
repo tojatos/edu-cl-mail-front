@@ -25,6 +25,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
 import notificationReducer from "./redux/reducers/notificationReducer";
+import BackgroundService from "./components/BackgroundService"
 
 const persistConfig = {
   key: "root",
@@ -63,6 +64,7 @@ ReactDOM.render(
             <CssBaseline />
             <App />
             <Notifier />
+            <BackgroundService />
           </SnackbarProvider>
         </MuiPickersUtilsProvider>
       </ThemeProvider>
