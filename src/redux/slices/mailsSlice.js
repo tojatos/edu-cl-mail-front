@@ -64,7 +64,8 @@ const mailsSlice = createSlice({
     },
     noNewMails(state, action) {
       const inbox = action.payload;
-      state.fetchStates[inbox] = FETCH_STATES.COMPLETED;
+      if ([FETCH_STATES.STARTING, FETCH_STATES.AWAITING].includes(state.fetchStates[inbox]))
+        state.fetchStates[inbox] = FETCH_STATES.COMPLETED;
     },
     appendMails(state, action) {
       const { inbox, mails } = action.payload;
@@ -90,7 +91,7 @@ export default mailsSlice.reducer;
 export const initializeInboxes = (login, password) => async (dispatch) => {
   Object.values(INBOXES).forEach((i) => {
     dispatch(getMailsInitial(login, password, i));
-    dispatch(getMailsAll(login, password, i));
+    // dispatch(getMailsAll(login, password, i));
   });
 };
 export const getMailsInitial = (login, password, inbox) => async (dispatch) => {
@@ -112,22 +113,22 @@ export const getMailsInitial = (login, password, inbox) => async (dispatch) => {
     console.warn(error);
   }
 };
-export const getMailsAll = (login, password, inbox) => async (dispatch) => {
-  try {
-    const result = await axios.post(GET_INBOX_ALL_URL(inbox), {
-      username: login,
-      password: password,
-    });
-    if (Array.isArray(result.data)) {
-      let mails = result.data;
-      dispatch(setAllMails({ inbox, mails }));
-    } else {
-      console.warn(result.data);
-    }
-  } catch (error) {
-    console.warn(error);
-  }
-};
+// export const getMailsAll = (login, password, inbox) => async (dispatch) => {
+//   try {
+//     const result = await axios.post(GET_INBOX_ALL_URL(inbox), {
+//       username: login,
+//       password: password,
+//     });
+//     if (Array.isArray(result.data)) {
+//       let mails = result.data;
+//       dispatch(setAllMails({ inbox, mails }));
+//     } else {
+//       console.warn(result.data);
+//     }
+//   } catch (error) {
+//     console.warn(error);
+//   }
+// };
 
 export const getAndAppendMails = (login, password, inbox, amount) => async (dispatch) => {
   try {
@@ -150,12 +151,13 @@ export const getAndAppendMails = (login, password, inbox, amount) => async (disp
 };
 
 export const reloadMailsIfNew = (
-  login,
-  password,
   inbox,
-  currentMailCount
-) => async (dispatch) => {
+  notify=true
+) => async (dispatch, getState) => {
   try {
+    const login = getState().userData.user.login;
+    const password = getState().userData.user.password;
+    const currentMailCount = getState().mailData.mails[inbox]?.length || 0;
     dispatch(awaitRequest(inbox));
     const result = await axios.post(GET_NUM_MAILS_URL(inbox), {
       username: login,
@@ -163,14 +165,14 @@ export const reloadMailsIfNew = (
     });
     const mailCount = result.data;
     if (mailCount <= currentMailCount) {
-      dispatch(enqueueSnackbarInfo("Nie ma nowych maili"));
+      if(notify) dispatch(enqueueSnackbarInfo("Nie ma nowych maili"));
       dispatch(noNewMails(inbox));
     } else {
-      dispatch(enqueueSnackbarSuccess("Znaleziono nowe maile, pobieranie..."));
+      if(notify) dispatch(enqueueSnackbarSuccess("Znaleziono nowe maile, pobieranie..."));
       dispatch(getAndAppendMails(login, password, inbox, mailCount - currentMailCount));
     }
   } catch (error) {
-    dispatch(enqueueSnackbarError("Błąd w połączeniu z serwerem"));
+    if(notify) dispatch(enqueueSnackbarError("Błąd w połączeniu z serwerem"));
     dispatch(noNewMails(inbox));
     console.warn(error);
   }

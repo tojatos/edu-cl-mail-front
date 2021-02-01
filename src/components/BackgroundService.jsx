@@ -1,5 +1,5 @@
-import {FETCH_STATES, getMailsAll, initializeInboxes} from "../redux/slices/mailsSlice";
-import {useEffect} from "react";
+import {FETCH_STATES, getMailsAll, initializeInboxes, reloadMailsIfNew} from "../redux/slices/mailsSlice";
+import {useCallback, useEffect} from "react";
 import {INBOXES} from "../shared";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -14,15 +14,39 @@ export default function BackgroundService() {
     mailData.fetchStates[inbox] === FETCH_STATES.STARTING;
 
   useEffect(() => {
-    if (notInitialized) {
+    if (notInitialized && userData.loggedIn) {
       dispatch(initializeInboxes(userData.user.login, userData.user.password));
     }
+  }, [userData]);
+
+  useEffect(() => {
     Object.values(INBOXES).forEach((i) => {
-      if (mailData.fetchStates[i] !== FETCH_STATES.COMPLETED) {
-        dispatch(getMailsAll(userData.user.login, userData.user.password, i));
+      if ([FETCH_STATES.INITIALIZED].includes(mailData.fetchStates[i])) {
+        dispatch(
+          reloadMailsIfNew(i, false)
+        );
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mailData.fetchStates]);
+
+  const checkTimeout = 1000 * 60 * 5; //every 5 minutes
+  const checkForNewMails = () => {
+    if(!userData.loggedIn) return;
+    Object.values(INBOXES).forEach((i) => {
+      if ([FETCH_STATES.INITIALIZED, FETCH_STATES.COMPLETED].includes(mailData.fetchStates[i])) {
+        dispatch(
+          reloadMailsIfNew(i, false)
+        );
+      }
+    });
+  }
+  const checkForNewMailsRepeatedly = () => {
+    checkForNewMails();
+    setTimeout(checkForNewMailsRepeatedly, checkTimeout);
+  }
+
+  useEffect(() => {
+    checkForNewMailsRepeatedly();
   }, []);
   return null;
 }

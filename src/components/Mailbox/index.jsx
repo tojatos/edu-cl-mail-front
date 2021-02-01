@@ -265,12 +265,7 @@ function Mailbox({ inbox }) {
                         edge="end"
                         onClick={() =>
                           dispatch(
-                            reloadMailsIfNew(
-                              userData.user.login,
-                              userData.user.password,
-                              inbox,
-                              mailData.mails[inbox]?.length || 0
-                            )
+                            reloadMailsIfNew(inbox)
                           )
                         }
                       >
