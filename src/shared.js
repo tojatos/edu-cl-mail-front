@@ -1,11 +1,13 @@
-export const INITIAL_MAIL_AMOUNT = 15;
+// export const INITIAL_MAIL_AMOUNT = 15;
 export const API_URL =
-  process.env.REACT_APP_API_URL || "https://krzysztofruczkowski.pl:2020/api";
+  process.env.REACT_APP_API_URL || "https://krzysztofruczkowski.pl/edu-cl-api/api";
 export const LOGIN_CHECK_URL = `${API_URL}/login_check`;
 export const GET_NUM_MAILS_URL = (inbox) => `${API_URL}/num_mails/${inbox}`;
-export const GET_INBOX_ALL_URL = (inbox) => `${API_URL}/inbox/${inbox}`;
-export const GET_INBOX_AMOUNT_URL = (inbox, amount) =>
-  `${API_URL}/inbox/${inbox}/${amount}`;
+// export const GET_INBOX_ALL_URL = (inbox) => `${API_URL}/inbox/${inbox}`;
+// export const GET_INBOX_AMOUNT_URL = (inbox, amount) =>
+//   `${API_URL}/inbox/${inbox}/${amount}`;
+export const GET_MAIL_RANGE_URL = (inbox, from, to) =>
+  `${API_URL}/mail_range/${inbox}/${from}/${to}`;
 
 export const INBOXES = {
   ODBIORCZA: "odbiorcza",

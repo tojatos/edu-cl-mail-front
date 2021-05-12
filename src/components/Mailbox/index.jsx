@@ -167,11 +167,11 @@ function Mailbox({ inbox }) {
   const mailFilterData = useSelector((state) => state.mailFilterData);
   const theme = useTheme();
   const formThemeColors = getSelectTheme(theme);
-  const notInitialized =
-    !mailData.fetchStates[inbox] ||
-    mailData.fetchStates[inbox] === FETCH_STATES.STARTING;
+  const notInitialized = !mailData.fetchStates[inbox];
+  // console.log(mailData.fetchStates[inbox]);
 
   let mails = mailData.mails[inbox] || [];
+  // console.log(mails);
 
   const selectedMail = mails
     .filter((e) => e.id === selectedMailId)

@@ -28,6 +28,9 @@ const userSlice = createSlice({
     logoutUser(state) {
       state.loggedIn = false;
       state.user = {};
+
+      // TODO: cancel all requests (idk if this is working)
+      // window.stop();
     },
     setLoginRequestState(state, action) {
       state.loginRequestState = action.payload;
@@ -53,15 +56,17 @@ export const checkLogin = (login, password) => async (dispatch, getState) => {
     });
     dispatch(setLoginRequestState(LOGIN_REQUEST_STATES.NONE));
 
-    if (result.data === true) {
+    if (result.data["authenticated"] === true) {
       dispatch(loginUser({ login, password }));
       dispatch(enqueueSnackbarSuccess("Pomyślnie zalogowano"));
-    } else {
-      dispatch(enqueueSnackbarError("Nieprawidłowy login lub hasło"));
     }
   } catch (error) {
     dispatch(setLoginRequestState(LOGIN_REQUEST_STATES.NONE));
-    dispatch(enqueueSnackbarError("Nie udało się połączyć z serwerem."));
-    console.error(error);
+    if(error.response && error.response.status === 401) {
+      dispatch(enqueueSnackbarError("Nieprawidłowy login lub hasło"));
+    } else {
+      dispatch(enqueueSnackbarError("Nie udało się połączyć z serwerem."));
+      console.error(error);
+    }
   }
 };

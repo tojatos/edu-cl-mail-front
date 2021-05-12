@@ -13,6 +13,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.21.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "notistack": "^1.0.2",

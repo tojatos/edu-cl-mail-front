@@ -15,25 +15,26 @@ export default function BackgroundService() {
 
   useEffect(() => {
     if (notInitialized && userData.loggedIn) {
-      dispatch(initializeInboxes(userData.user.login, userData.user.password));
+      dispatch(initializeInboxes());
     }
   }, [userData]);
 
-  useEffect(() => {
-    Object.values(INBOXES).forEach((i) => {
-      if ([FETCH_STATES.INITIALIZED].includes(mailData.fetchStates[i])) {
-        dispatch(
-          reloadMailsIfNew(i, false)
-        );
-      }
-    });
-  }, [mailData.fetchStates]);
+  // useEffect(() => {
+  //   Object.values(INBOXES).forEach((i) => {
+  //     if ([FETCH_STATES.INITIALIZED].includes(mailData.fetchStates[i])) {
+  //       dispatch(
+  //         reloadMailsIfNew(i, false)
+  //       );
+  //     }
+  //   });
+  // }, [mailData.fetchStates]);
 
   const checkTimeout = 1000 * 60 * 5; //every 5 minutes
   const checkForNewMails = () => {
     if(!userData.loggedIn) return;
     Object.values(INBOXES).forEach((i) => {
-      if ([FETCH_STATES.INITIALIZED, FETCH_STATES.COMPLETED].includes(mailData.fetchStates[i])) {
+      // if ([FETCH_STATES.INITIALIZED, FETCH_STATES.COMPLETED].includes(mailData.fetchStates[i])) {
+      if ([FETCH_STATES.COMPLETED].includes(mailData.fetchStates[i])) {
         dispatch(
           reloadMailsIfNew(i, false)
         );
