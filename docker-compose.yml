@@ -1,6 +1,7 @@
 version: '3.7'
 services:
   edu-cl-mail-front:
+    restart: always
     build:
       context: .
     networks:
