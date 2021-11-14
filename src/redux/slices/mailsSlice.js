@@ -7,7 +7,6 @@ const _ = require('lodash');
 
 export const FETCH_STATES = {
   STARTING: "STARTING",
-  // INITIALIZED: "INITIALIZED",
   COMPLETED: "COMPLETED",
   AWAITING: "AWAITING",
 };
@@ -21,30 +20,6 @@ const mailsSlice = createSlice({
     mailCount: {},
   },
   reducers: {
-    // initMails(state, action) {
-    //   const { inbox, mails } = action.payload;
-    //   if (!state.fetchStates[inbox])
-    //     state.fetchStates[inbox] = FETCH_STATES.STARTING;
-    //   if (state.fetchStates[inbox] === FETCH_STATES.STARTING) {
-    //     if (!state.mails[inbox]) state.mails[inbox] = [];
-    //     state.mails[inbox] = mails;
-    //     state.mails[inbox].forEach((e, i) => (e.id = i));
-    //     //TODO: get this^ from API
-    //
-    //     state.fetchStates[inbox] = FETCH_STATES.INITIALIZED;
-    //     // if every inbox is fetched
-    //     // if (Object.values(INBOXES).every((i) => state.mails[i]))
-    //   }
-    // },
-    // setAllMails(state, action) {
-    //   const { inbox, mails } = action.payload;
-    //   if (!state.mails[inbox]) state.mails[inbox] = [];
-    //   state.mails[inbox] = mails;
-    //   state.mails[inbox].forEach((e, i) => (e.id = i));
-    //   //TODO: get this^ from API
-    //
-    //   state.fetchStates[inbox] = FETCH_STATES.COMPLETED;
-    // },
     setCurrentInbox(state, action) {
       state.currentInbox = action.payload;
     },
@@ -74,14 +49,9 @@ const mailsSlice = createSlice({
       if(!inbox || !mails) return;
       if (state.mails[inbox]) {
         const mailsThatDoNotExistAlready = mails.filter(m => !state.mails[inbox].some(x => x.id === m.id));
-        // console.log(`mails: ${mailsThatDoNotExistAlready}`);
-
-        console.log(_.orderBy(state.mails[inbox].concat(mailsThatDoNotExistAlready), ['id'], ['desc']));
         state.mails[inbox] = _.orderBy(state.mails[inbox].concat(mailsThatDoNotExistAlready), ['id'], ['desc']);
       } else {
-        console.log(_.orderBy(mails, ['id'], ['desc']));
         state.mails[inbox] = _.orderBy(mails, ['id'], ['desc']);
-
       }
 
       if(state.mails[inbox].length >= state.mailCount[inbox]) {
@@ -92,10 +62,8 @@ const mailsSlice = createSlice({
 });
 
 export const {
-  // initMails,
   cleanMails,
   setStarting,
-  // setAllMails,
   setMailCount,
   setCurrentInbox,
   awaitRequest,
@@ -107,7 +75,6 @@ export default mailsSlice.reducer;
 export const initializeInboxes = () => async (dispatch) => {
   Object.values(INBOXES).forEach((i) => {
     dispatch(getMailsInitial(i));
-    // dispatch(getMailsAll(login, password, i));
   });
 };
 
@@ -118,75 +85,13 @@ export const getMailsInitial = (inbox) => async (dispatch, getState) => {
   const currentMailCount = getState().mailData.mails[inbox]?.length || 0;
   const mailCount = await getMailCount(login, password, inbox);
   dispatch(setMailCount({inbox, mailCount}));
-  // const rangesCount = Math.floor(mailCount / 5) + 1;
   const mailsToFetchAtOnce = 10;
   const ranges = _.range(0, mailCount - currentMailCount, mailsToFetchAtOnce).map(x => [x, x+mailsToFetchAtOnce - 1]).reverse()
-  // console.log("ranges: " + ranges);
-
-  // ranges.map(async r => await getMailRange())
-
-  // dispatch(appendMails({ inbox, mails }));
   for (const r of ranges) {
     let mails = await getMailRange(login, password, inbox, r[0], r[1])
     dispatch(appendMails({ inbox, mails }));
   }
-
-
-  // try {
-  //   const result = await axios.post(
-  //     GET_MAIL_RANGE_URL(inbox, 0, 4),
-  //     {
-  //       username: login,
-  //       password: password,
-  //     }
-  //   );
-  //   if (Array.isArray(result.data)) {
-  //     let mails = result.data;
-  //     // console.log(mails);
-  //     dispatch(appendMails({ inbox, mails }));
-  //   } else {
-  //     console.warn(result.data);
-  //   }
-  // } catch (error) {
-  //   console.warn(error);
-  // }
 };
-// export const getMailsAll = (login, password, inbox) => async (dispatch) => {
-//   try {
-//     const result = await axios.post(GET_INBOX_ALL_URL(inbox), {
-//       username: login,
-//       password: password,
-//     });
-//     if (Array.isArray(result.data)) {
-//       let mails = result.data;
-//       dispatch(setAllMails({ inbox, mails }));
-//     } else {
-//       console.warn(result.data);
-//     }
-//   } catch (error) {
-//     console.warn(error);
-//   }
-// };
-
-// export const getAndAppendMails = (login, password, inbox, amount) => async (dispatch) => {
-//   try {
-//     const result = await axios.post(
-//       GET_INBOX_AMOUNT_URL(inbox, amount),
-//       {
-//         username: login,
-//         password: password,
-//       }
-//     );
-//     if (Array.isArray(result.data)) {
-//       let mails = result.data;
-//       dispatch(appendMails({ inbox, mails }));
-//     } else {
-//       console.warn(result.data);
-//     }
-//   } catch (error) {
-//     console.warn(error);
-//   }
-// };
 
 export const downloadNewMails = (inbox) => async (dispatch, getState) => {
   const login = getState().userData.user.login;
@@ -250,11 +155,6 @@ export const reloadMailsIfNew = (
     const password = getState().userData.user.password;
     const currentMailCount = getState().mailData.mails[inbox]?.length || 0;
     dispatch(awaitRequest(inbox));
-    // const result = await axios.post(GET_NUM_MAILS_URL(inbox), {
-    //   username: login,
-    //   password: password,
-    // });
-    // const mailCount = result.data;
     const mailCount = await getMailCount(login, password, inbox);
     dispatch(setMailCount({ inbox, mailCount }));
     if (mailCount <= currentMailCount) {
@@ -262,7 +162,6 @@ export const reloadMailsIfNew = (
       dispatch(noNewMails(inbox));
     } else {
       if(notify) dispatch(enqueueSnackbarSuccess("Znaleziono nowe maile, pobieranie..."));
-      // dispatch(getAndAppendMails(login, password, inbox, mailCount - currentMailCount));
       dispatch(downloadNewMails(inbox));
     }
   } catch (error) {
