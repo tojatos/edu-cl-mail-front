@@ -10,7 +10,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.middlewares.edu-cl-mail-front-stripprefix.stripPrefix.prefixes=/edu-cl-mail"
-      - "traefik.http.routers.edu-cl-mail-front.rule=(Host(`krzysztofruczkowski.pl`) && PathPrefix(`/edu-cl-mail`))"
+      - "traefik.http.routers.edu-cl-mail-front.rule=((Host(`krzysztofruczkowski.pl`) || Host(`www.krzysztofruczkowski.pl`)) && PathPrefix(`/edu-cl-mail/`))"
       - "traefik.http.routers.edu-cl-mail-front.middlewares=edu-cl-mail-front-stripprefix"
       - "traefik.http.routers.edu-cl-mail-front.tls=true"
       - "traefik.http.routers.edu-cl-mail-front.tls.certresolver=myresolver"
