@@ -4,6 +4,7 @@ services:
     restart: always
     build:
       context: .
+    image: tojatos/edu-cl-mail-front
     networks:
       - web
       - default

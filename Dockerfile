@@ -1,6 +1,6 @@
 FROM node:15.11.0 AS build
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .
 
